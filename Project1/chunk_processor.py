@@ -21,3 +21,6 @@ class PNGChunkProcessor:
 
     def print_chunks_types(self):
         print([chunk.chunk_type for chunk in self.chunks])
+
+    def return_chunks_names_query(self):
+        return "  ".join([str(chunk.chunk_type) for chunk in self.chunks])
