@@ -32,6 +32,7 @@ class PNGChunkProcessor:
     def IHDR_chunk_processor(self):
         if self.chunks[0] == None:
             print("You do not read image!")
+
         else:
             IHDR_data = self.chunks[0].chunk_data
             IHDR_data_values = struct.unpack('>IIBBBBB', IHDR_data)
@@ -41,6 +42,7 @@ class PNGChunkProcessor:
             self.color_type = IHDR_data.get_color_type()
             IHDR_data.print_IHDR_data()
 
+
     def IDAT_chunk_processor(self):
         IDAT_data = b''.join(chunk.chunk_data for chunk in self.chunks if chunk.chunk_type == b'IDAT')
         IDAT_data = zlib.decompress(IDAT_data)
@@ -49,6 +51,7 @@ class PNGChunkProcessor:
         recon_pixels = IDAT_filter.pixels_filter()
         plt.imshow(np.array(recon_pixels).reshape((self.height, self.width, 4)))
         plt.show()
+
 
     def PLTE_chunk_processor(self):
         PLTE_chunk = []
@@ -63,4 +66,12 @@ class PNGChunkProcessor:
             print("PLTE chunk must appear")
         if len(PLTE_chunk) != 1:
             print("Incorrect number of PLTE chunk")
+
+    def IEND_chunk_processor(self):
+        number_of_chunks = len(self.chunks)
+        if self.chunks[number_of_chunks-1].chunk_type != b"IEND":
+            print("IEND must be the last chunk")
+        IEND_data = struct.unpack('>', self.chunks[number_of_chunks-1].chunk_data)
+        if  len(IEND_data) == 0:
+            print("IEND is empty")
 

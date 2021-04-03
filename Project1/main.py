@@ -7,7 +7,7 @@ def main():
     chunk_processor.save_chunks(img_source)
     chunk_processor.print_chunks_types()
     chunk_processor.IHDR_chunk_processor()
-    chunk_processor.PLTE_chunk_processor()
+    chunk_processor.IEND_chunk_processor()
 
     root = Tk()
     label = Label(root, text="Hello world")
