@@ -1,5 +1,3 @@
-
-
 class IDATFilter:
 
     def __init__(self,width,height, IDAT_data):

@@ -5,6 +5,7 @@ import numpy as np
 
 from chunk import Chunk
 from IDAT_filter import IDATFilter
+from IHDR_data import IHDRData
 
 class PNGChunkProcessor:
 
@@ -34,29 +35,11 @@ class PNGChunkProcessor:
         else:
             IHDR_data = self.chunks[0].chunk_data
             IHDR_data_values = struct.unpack('>IIBBBBB', IHDR_data)
-            self.width = IHDR_data_values[0]
-            self.height = IHDR_data_values[1]
-            bit_depth = IHDR_data_values[2]
-            color_type = IHDR_data_values[3]
-            compression_method = IHDR_data_values[4]
-            filter_method = IHDR_data_values[5]
-            interlace_method = IHDR_data_values[6]
-            print("Width of image {} and height of image {}".format(self.width,
-                                                                    self.height))
-            print("Bit depth of image: {}".format(bit_depth))
-            if color_type == 0:
-                print("PNG Image Type: Grayscale")
-            elif color_type == 2:
-                print("PNG Image Type: Truecolor")
-            elif color_type == 3:
-                print("PNG Image Type: Indexed-color")
-            elif color_type == 4:
-                print("PNG Image Type: Grayscale with alpha	")
-            elif color_type == 6:
-                print("PNG Image Type: Truecolor with alpha")
-            print("Compression method: {}".format(compression_method))
-            print("Filter method: {}".format(filter_method))
-            print("Interlace method: {}".format(interlace_method))
+            IHDR_data = IHDRData(IHDR_data_values)
+            self.width = IHDR_data.get_width()
+            self.height = IHDR_data.get_height()
+            self.color_type = IHDR_data.get_color_type()
+            IHDR_data.print_IHDR_data()
 
     def IDAT_chunk_processor(self):
         IDAT_data = b''.join(chunk.chunk_data for chunk in self.chunks if chunk.chunk_type == b'IDAT')
