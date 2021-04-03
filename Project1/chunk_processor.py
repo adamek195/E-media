@@ -1,9 +1,9 @@
 import zlib
 import struct
+from chunk import Chunk
 import matplotlib.pyplot as plt
 import numpy as np
 
-from chunk import Chunk
 from IHDR_data import IHDRData
 from IDAT_filter import IDATFilter
 
@@ -12,8 +12,8 @@ class PNGChunkProcessor:
     def __init__(self):
         self.chunks = []
 
-    @classmethod
-    def validate_png(cls, img):
+    @staticmethod
+    def validate_png(img):
         png_signature = b'\x89PNG\r\n\x1a\n'
         if img.read(len(png_signature)) != png_signature:
             raise Exception('Invalid PNG Signature')
@@ -43,12 +43,14 @@ class PNGChunkProcessor:
 
 
     def IDAT_chunk_processor(self):
-        IDAT_data = b''.join(chunk.chunk_data for chunk in self.chunks if chunk.chunk_type == b'IDAT')
+        IDAT_data = b''.join(chunk.chunk_data for chunk in self.chunks
+                                            if chunk.chunk_type == b'IDAT')
         IDAT_data = zlib.decompress(IDAT_data)
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         recon_pixels = []
         recon_pixels = IDAT_filter.pixels_filter()
-        plt.imshow(np.array(recon_pixels).reshape((self.height, self.width, 4)))
+        plt.imshow(np.array(recon_pixels).reshape((self.height,
+                                                            self.width, 4)))
         plt.show()
 
 
@@ -71,14 +73,14 @@ class PNGChunkProcessor:
         else:
             PLTE_length= self.chunks[PLTE_index].get_chunk_length()
             if PLTE_length % 3 != 0:
-                print("Incorrect length of PLTE, length must be divisible by 3")
+                print("Bad length of PLTE, length must be divisible by 3")
 
 
     def IEND_chunk_processor(self):
         number_of_chunks = len(self.chunks)
         if self.chunks[number_of_chunks-1].chunk_type != b"IEND":
             print("IEND must be the last chunk")
-        IEND_data = struct.unpack('>', self.chunks[number_of_chunks-1].chunk_data)
+        IEND_data = struct.unpack('>',
+                                self.chunks[number_of_chunks - 1].chunk_data)
         if  len(IEND_data) == 0:
             print("IEND is empty")
-
