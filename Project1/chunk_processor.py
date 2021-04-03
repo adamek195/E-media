@@ -1,5 +1,10 @@
-from chunk import Chunk
+import zlib
 import struct
+import matplotlib.pyplot as plt
+import numpy as np
+
+from chunk import Chunk
+from IDAT_filter import IDATFilter
 
 class PNGChunkProcessor:
 
@@ -29,15 +34,15 @@ class PNGChunkProcessor:
         else:
             IHDR_data = self.chunks[0].chunk_data
             IHDR_data_values = struct.unpack('>IIBBBBB', IHDR_data)
-            width = IHDR_data_values[0]
-            height = IHDR_data_values[1]
+            self.width = IHDR_data_values[0]
+            self.height = IHDR_data_values[1]
             bit_depth = IHDR_data_values[2]
             color_type = IHDR_data_values[3]
             compression_method = IHDR_data_values[4]
             filter_method = IHDR_data_values[5]
             interlace_method = IHDR_data_values[6]
-            print("Width of image {} and height of image {}".format(width,
-                                                                    height))
+            print("Width of image {} and height of image {}".format(self.width,
+                                                                    self.height))
             print("Bit depth of image: {}".format(bit_depth))
             if color_type == 0:
                 print("PNG Image Type: Grayscale")
@@ -52,3 +57,12 @@ class PNGChunkProcessor:
             print("Compression method: {}".format(compression_method))
             print("Filter method: {}".format(filter_method))
             print("Interlace method: {}".format(interlace_method))
+
+    def IDAT_chunk_processor(self):
+        IDAT_data = b''.join(chunk.chunk_data for chunk in self.chunks if chunk.chunk_type == b'IDAT')
+        IDAT_data = zlib.decompress(IDAT_data)
+        IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
+        recon_pixels = []
+        recon_pixels = IDAT_filter.pixels_filter()
+        plt.imshow(np.array(recon_pixels).reshape((self.height, self.width, 4)))
+        plt.show()
