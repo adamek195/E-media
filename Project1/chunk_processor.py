@@ -32,7 +32,6 @@ class PNGChunkProcessor:
     def IHDR_chunk_processor(self):
         if self.chunks[0] == None:
             print("You do not read image!")
-
         else:
             IHDR_data = self.chunks[0].chunk_data
             IHDR_data_values = struct.unpack('>IIBBBBB', IHDR_data)
@@ -55,9 +54,12 @@ class PNGChunkProcessor:
 
     def PLTE_chunk_processor(self):
         PLTE_chunk = []
+        i = 0
         for chunk in self.chunks:
             if chunk.chunk_type == b'PLTE':
                 PLTE_chunk.append(chunk)
+                PLTE_index = i
+            i+=1
         if PLTE_chunk == None:
             print("Image not have PLTE chunk")
         if self.color_type == 2 or self.color_type == 6:
@@ -66,6 +68,11 @@ class PNGChunkProcessor:
             print("PLTE chunk must appear")
         if len(PLTE_chunk) != 1:
             print("Incorrect number of PLTE chunk")
+        else:
+            PLTE_length= self.chunks[PLTE_index].get_chunk_length()
+            if PLTE_length % 3 != 0:
+                print("Incorrect length of PLTE, length must be divisible by 3")
+
 
     def IEND_chunk_processor(self):
         number_of_chunks = len(self.chunks)
