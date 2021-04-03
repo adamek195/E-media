@@ -8,7 +8,6 @@ class IDATFilter:
         self.IDAT_data = []
         self.IDAT_data = IDAT_data
 
-    @classmethod
     def paeth_predictor(self, a, b, c):
         p = a + b - c
         pa = abs(p - a)

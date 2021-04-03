@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from chunk import Chunk
-from IDAT_filter import IDATFilter
 from IHDR_data import IHDRData
+from IDAT_filter import IDATFilter
 
 class PNGChunkProcessor:
 
@@ -49,3 +49,18 @@ class PNGChunkProcessor:
         recon_pixels = IDAT_filter.pixels_filter()
         plt.imshow(np.array(recon_pixels).reshape((self.height, self.width, 4)))
         plt.show()
+
+    def PLTE_chunk_processor(self):
+        PLTE_chunk = []
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'PLTE':
+                PLTE_chunk.append(chunk)
+        if PLTE_chunk == None:
+            print("Image not have PLTE chunk")
+        if self.color_type == 2 or self.color_type == 6:
+            print("PLTE chunk is optional")
+        elif self.color_type == 3:
+            print("PLTE chunk must appear")
+        if len(PLTE_chunk) != 1:
+            print("Incorrect number of PLTE chunk")
+
