@@ -30,16 +30,13 @@ class PNGChunkProcessor:
         print([chunk.chunk_type for chunk in self.chunks])
 
     def IHDR_chunk_processor(self):
-        if self.chunks[0] == None:
-            print("You do not read image!")
-        else:
-            IHDR_data = self.chunks[0].chunk_data
-            IHDR_data_values = struct.unpack('>IIBBBBB', IHDR_data)
-            IHDR_data = IHDRData(IHDR_data_values)
-            self.width = IHDR_data.get_width()
-            self.height = IHDR_data.get_height()
-            self.color_type = IHDR_data.get_color_type()
-            IHDR_data.print_IHDR_data()
+        IHDR_data = self.chunks[0].chunk_data
+        IHDR_data_values = struct.unpack('>IIBBBBB', IHDR_data)
+        IHDR_data = IHDRData(IHDR_data_values)
+        self.width = IHDR_data.get_width()
+        self.height = IHDR_data.get_height()
+        self.color_type = IHDR_data.get_color_type()
+        IHDR_data.print_IHDR_data()
 
 
     def IDAT_chunk_processor(self):
@@ -61,17 +58,17 @@ class PNGChunkProcessor:
                 PLTE_index = i
             i+=1
         if PLTE_chunk == None:
-            print("Image not have PLTE chunk")
+            raise Exception("Image not have PLTE chunk")
         if self.color_type == 2 or self.color_type == 6:
             print("PLTE chunk is optional")
         elif self.color_type == 3:
             print("PLTE chunk must appear")
         if len(PLTE_chunk) != 1:
-            print("Incorrect number of PLTE chunk")
+            raise Exception("Incorrect number of PLTE chunk")
         else:
             PLTE_length= self.chunks[PLTE_index].get_chunk_length()
             if PLTE_length % 3 != 0:
-                print("Incorrect length of PLTE, length must be divisible by 3")
+                raise Exception("Incorrect length of PLTE, length must be divisible by 3")
 
 
     def IEND_chunk_processor(self):
