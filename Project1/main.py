@@ -8,12 +8,6 @@ def main():
     chunk_processor.print_chunks_types()
     chunk_processor.IHDR_chunk_processor()
     chunk_processor.PLTE_chunk_processor()
-    chunk_processor.IEND_chunk_processor()
-
-    root = Tk()
-    label = Label(root, text="Hello world")
-    label.pack()
-    root.mainloop()
 
 
 if __name__ == "__main__":

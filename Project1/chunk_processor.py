@@ -6,6 +6,7 @@ import numpy as np
 
 from IHDR_data import IHDRData
 from IDAT_filter import IDATFilter
+from PLTE_data import PLTEData
 
 class PNGChunkProcessor:
 
@@ -36,6 +37,7 @@ class PNGChunkProcessor:
         self.width = IHDR_data.get_width()
         self.height = IHDR_data.get_height()
         self.color_type = IHDR_data.get_color_type()
+        self.bit_depth = IHDR_data.get_bit_depth()
         IHDR_data.print_IHDR_data()
 
 
@@ -71,6 +73,11 @@ class PNGChunkProcessor:
             PLTE_length= self.chunks[PLTE_index].get_chunk_length()
             if PLTE_length % 3 != 0:
                 raise Exception("Incorrect length of PLTE, length must be divisible by 3")
+            PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
+            PLTE_data.parse_plte_data()
+            PLTE_data.print_palette()
+            if PLTE_data.get_amount_of_entries_in_palette() > 2**self.bit_depth:
+                raise Exception("Incorrect number of entries in palette!")
 
 
     def IEND_chunk_processor(self):

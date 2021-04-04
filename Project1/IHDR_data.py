@@ -20,6 +20,9 @@ class IHDRData:
     def get_color_type(self):
         return self.color_type
 
+    def get_bit_depth(self):
+        return self.bit_depth
+
     def print_IHDR_data(self):
         print("Width of image {} and height of image {}".format(self.width, self.height))
         print("Bit depth of image: {}".format(self.bit_depth))
