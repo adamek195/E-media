@@ -12,6 +12,8 @@ def choose_photo():
     img_source = open(img_path, 'rb')
     chunk_processor.save_chunks(img_source)
     chunk_processor.print_chunks_types()
+    chunk_processor.IHDR_chunk_processor()
+    chunk_processor.PLTE_chunk_processor()
     query = chunk_processor.return_chunks_names_query()
     label_chunks = Label(root, text=query)
     label_chunks.grid(row=3, column=0)
@@ -28,6 +30,9 @@ def main():
     fetch_btn.grid(row=1, column=0, columnspan=1, pady=10, padx=10, ipadx=130)
 
     root.mainloop()
+
+
+
 
 
 if __name__ == "__main__":
