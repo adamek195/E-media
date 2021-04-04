@@ -30,6 +30,9 @@ class PNGChunkProcessor:
     def print_chunks_types(self):
         print([chunk.chunk_type for chunk in self.chunks])
 
+    def return_chunks_names_query(self):
+        return "  ".join([str(chunk.chunk_type) for chunk in self.chunks])
+
     def IHDR_chunk_processor(self):
         IHDR_data = self.chunks[0].chunk_data
         IHDR_data_values = struct.unpack('>IIBBBBB', IHDR_data)
