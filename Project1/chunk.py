@@ -12,3 +12,6 @@ class Chunk:
                             zlib.crc32(struct.pack('>4s', self.chunk_type)))
         if self.chunk_crc != chunk_actual_crc:
             raise Exception('invalid chunk sum')
+
+    def get_chunk_length(self):
+        return self.chunk_length
