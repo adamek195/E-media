@@ -10,13 +10,15 @@ from PLTE_data import PLTEData
 
 class PNGChunkProcessor:
 
+    PNG_SIGNATURE = b'\x89PNG\r\n\x1a\n'
+    CRITICAL_CHUNKS = [b'IHDR', b'PLTE', b'IDAT', b'IEND']
+
     def __init__(self):
         self.chunks = []
 
     @staticmethod
     def validate_png(img):
-        png_signature = b'\x89PNG\r\n\x1a\n'
-        if img.read(len(png_signature)) != png_signature:
+        if img.read(len(PNGChunkProcessor.PNG_SIGNATURE)) != PNGChunkProcessor.PNG_SIGNATURE:
             raise Exception('Invalid PNG Signature')
 
     def save_chunks(self, img):
@@ -91,3 +93,15 @@ class PNGChunkProcessor:
                                 self.chunks[number_of_chunks - 1].chunk_data)
         if  len(IEND_data) == 0:
             print("IEND is empty")
+
+    def create_new_image(self):
+        filename = "tmp.png"
+        temporary_file = open("./images/{}".format(filename), 'wb')
+        temporary_file.write(PNGChunkProcessor.PNG_SIGNATURE)
+        for chunk in self.chunks:
+            if chunk.chunk_type in PNGChunkProcessor.CRITICAL_CHUNKS:
+                temporary_file.write(struct.pack('>I', chunk.chunk_length))
+                temporary_file.write(chunk.chunk_type)
+                temporary_file.write(chunk.chunk_data)
+                temporary_file.write(struct.pack('>I', chunk.chunk_crc))
+        temporary_file.close()
