@@ -1,14 +1,14 @@
 import zlib
 import struct
+import os
 from chunk import Chunk
+from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
 from IHDR_data import IHDRData
 from IDAT_filter import IDATFilter
 from PLTE_data import PLTEData
-from pathlib import Path
-import os
 
 class PNGChunkProcessor:
 
@@ -20,7 +20,8 @@ class PNGChunkProcessor:
 
     @staticmethod
     def validate_png(img):
-        if img.read(len(PNGChunkProcessor.PNG_SIGNATURE)) != PNGChunkProcessor.PNG_SIGNATURE:
+        if (img.read(len(PNGChunkProcessor.PNG_SIGNATURE))
+                                        != PNGChunkProcessor.PNG_SIGNATURE):
             raise Exception('Invalid PNG Signature')
 
     def save_chunks(self, img):
@@ -55,9 +56,9 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         recon_pixels = []
         recon_pixels = IDAT_filter.pixels_filter()
-        # plt.imshow(np.array(recon_pixels).reshape((self.height,
-        #                                                     self.width, 4)))
-        # plt.show()
+        plt.imshow(np.array(recon_pixels).reshape((self.height,
+                                                            self.width, 4)))
+        plt.show()
 
 
     def PLTE_chunk_processor(self):
@@ -68,7 +69,7 @@ class PNGChunkProcessor:
                 PLTE_chunk.append(chunk)
                 PLTE_index = i
             i+=1
-        if PLTE_chunk == None:
+        if PLTE_chunk is None:
             raise Exception("Image not have PLTE chunk")
         if self.color_type == 2 or self.color_type == 6:
             print("PLTE chunk is optional")
@@ -76,15 +77,15 @@ class PNGChunkProcessor:
             print("PLTE chunk must appear")
         if len(PLTE_chunk) != 1:
             raise Exception("Incorrect number of PLTE chunk")
-        else:
-            PLTE_length= self.chunks[PLTE_index].get_chunk_length()
-            if PLTE_length % 3 != 0:
-                raise Exception("Incorrect length of PLTE, length must be divisible by 3")
-            PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
-            PLTE_data.parse_plte_data()
-            PLTE_data.print_palette()
-            if PLTE_data.get_amount_of_entries_in_palette() > 2**self.bit_depth:
-                raise Exception("Incorrect number of entries in palette!")
+        PLTE_length= self.chunks[PLTE_index].get_chunk_length()
+        if PLTE_length % 3 != 0:
+            raise Exception("Incorrect PLTE length - not divisible by 3")
+        PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
+        PLTE_data.parse_plte_data()
+        PLTE_data.print_palette()
+        if (PLTE_data.get_amount_of_entries_in_palette()
+                                                    > 2**self.bit_depth):
+            raise Exception("Incorrect number of entries in palette!")
 
 
     def IEND_chunk_processor(self):
@@ -101,7 +102,7 @@ class PNGChunkProcessor:
         filename = "tmp.png"
         img_path = "./images/{}".format(filename)
         if Path(img_path).is_file():
-            os.remove(img_path)            
+            os.remove(img_path)
         temporary_file = open(img_path, 'wb')
         temporary_file.write(PNGChunkProcessor.PNG_SIGNATURE)
         for chunk in self.chunks:

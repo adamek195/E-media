@@ -22,7 +22,8 @@ def display_photo(chunk_processor):
     filename = chunk_processor.create_new_image()
     path = "./images/{}".format(filename)
     img = Image.open(path)
-    img = ImageTk.PhotoImage(Image.open(path).resize((round(300/img.height * img.width), round(300))))
+    img = ImageTk.PhotoImage(Image.open(path).resize((round(300 / img.height *
+                                                     img.width), round(300))))
     label = Label(root, image=img)
     label.image = img
     label.grid(row=2, column=0)
