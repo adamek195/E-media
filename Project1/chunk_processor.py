@@ -1,6 +1,8 @@
 import zlib
 import struct
+import os
 from chunk import Chunk
+from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,13 +12,16 @@ from PLTE_data import PLTEData
 
 class PNGChunkProcessor:
 
+    PNG_SIGNATURE = b'\x89PNG\r\n\x1a\n'
+    CRITICAL_CHUNKS = [b'IHDR', b'PLTE', b'IDAT', b'IEND']
+
     def __init__(self):
         self.chunks = []
 
     @staticmethod
     def validate_png(img):
-        png_signature = b'\x89PNG\r\n\x1a\n'
-        if img.read(len(png_signature)) != png_signature:
+        if (img.read(len(PNGChunkProcessor.PNG_SIGNATURE))
+                                        != PNGChunkProcessor.PNG_SIGNATURE):
             raise Exception('Invalid PNG Signature')
 
     def save_chunks(self, img):
@@ -64,7 +69,7 @@ class PNGChunkProcessor:
                 PLTE_chunk.append(chunk)
                 PLTE_index = i
             i+=1
-        if PLTE_chunk == None:
+        if PLTE_chunk is None:
             raise Exception("Image not have PLTE chunk")
         if self.color_type == 2 or self.color_type == 6:
             print("PLTE chunk is optional")
@@ -72,15 +77,15 @@ class PNGChunkProcessor:
             print("PLTE chunk must appear")
         if len(PLTE_chunk) != 1:
             raise Exception("Incorrect number of PLTE chunk")
-        else:
-            PLTE_length= self.chunks[PLTE_index].get_chunk_length()
-            if PLTE_length % 3 != 0:
-                raise Exception("Incorrect length of PLTE, length must be divisible by 3")
-            PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
-            PLTE_data.parse_plte_data()
-            PLTE_data.print_palette()
-            if PLTE_data.get_amount_of_entries_in_palette() > 2**self.bit_depth:
-                raise Exception("Incorrect number of entries in palette!")
+        PLTE_length= self.chunks[PLTE_index].get_chunk_length()
+        if PLTE_length % 3 != 0:
+            raise Exception("Incorrect PLTE length - not divisible by 3")
+        PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
+        PLTE_data.parse_plte_data()
+        PLTE_data.print_palette()
+        if (PLTE_data.get_amount_of_entries_in_palette()
+                                                    > 2**self.bit_depth):
+            raise Exception("Incorrect number of entries in palette!")
 
 
     def IEND_chunk_processor(self):
@@ -91,3 +96,20 @@ class PNGChunkProcessor:
                                 self.chunks[number_of_chunks - 1].chunk_data)
         if  len(IEND_data) == 0:
             print("IEND is empty")
+
+
+    def create_new_image(self):
+        filename = "tmp.png"
+        img_path = "./images/{}".format(filename)
+        if Path(img_path).is_file():
+            os.remove(img_path)
+        temporary_file = open(img_path, 'wb')
+        temporary_file.write(PNGChunkProcessor.PNG_SIGNATURE)
+        for chunk in self.chunks:
+            if chunk.chunk_type in PNGChunkProcessor.CRITICAL_CHUNKS:
+                temporary_file.write(struct.pack('>I', chunk.chunk_length))
+                temporary_file.write(chunk.chunk_type)
+                temporary_file.write(chunk.chunk_data)
+                temporary_file.write(struct.pack('>I', chunk.chunk_crc))
+        temporary_file.close()
+        return filename

@@ -1,7 +1,7 @@
-from tkinter import Tk, Label, Button
+from tkinter import Tk, Label, Button, Canvas
 from tkinter.filedialog import askopenfilename
 from chunk_processor import PNGChunkProcessor
-
+from PIL import Image, ImageTk
 
 root = Tk()
 
@@ -13,16 +13,23 @@ def choose_photo():
     chunk_processor.save_chunks(img_source)
     chunk_processor.print_chunks_types()
     chunk_processor.IHDR_chunk_processor()
-    chunk_processor.PLTE_chunk_processor()
+    chunk_processor.IDAT_chunk_processor()
     query = chunk_processor.return_chunks_names_query()
-    label_chunks = Label(root, text=query)
-    label_chunks.grid(row=3, column=0)
-    label_path = Label(root, text=img_path)
-    label_path.grid(row=5, column=0)
+    display_photo(chunk_processor)
+
+
+def display_photo(chunk_processor):
+    filename = chunk_processor.create_new_image()
+    path = "./images/{}".format(filename)
+    img = Image.open(path)
+    img = ImageTk.PhotoImage(Image.open(path).resize((round(300 / img.height *
+                                                     img.width), round(300))))
+    label = Label(root, image=img)
+    label.image = img
+    label.grid(row=2, column=0)
 
 
 def main():
-
     root.title("PNG reader")
     root.geometry("400x400")
 
@@ -30,8 +37,6 @@ def main():
     fetch_btn.grid(row=1, column=0, columnspan=1, pady=10, padx=10, ipadx=130)
 
     root.mainloop()
-
-
 
 
 
