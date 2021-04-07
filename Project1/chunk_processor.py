@@ -7,6 +7,8 @@ import numpy as np
 from IHDR_data import IHDRData
 from IDAT_filter import IDATFilter
 from PLTE_data import PLTEData
+from pathlib import Path
+import os
 
 class PNGChunkProcessor:
 
@@ -53,9 +55,9 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         recon_pixels = []
         recon_pixels = IDAT_filter.pixels_filter()
-        plt.imshow(np.array(recon_pixels).reshape((self.height,
-                                                            self.width, 4)))
-        plt.show()
+        # plt.imshow(np.array(recon_pixels).reshape((self.height,
+        #                                                     self.width, 4)))
+        # plt.show()
 
 
     def PLTE_chunk_processor(self):
@@ -94,9 +96,13 @@ class PNGChunkProcessor:
         if  len(IEND_data) == 0:
             print("IEND is empty")
 
+
     def create_new_image(self):
         filename = "tmp.png"
-        temporary_file = open("./images/{}".format(filename), 'wb')
+        img_path = "./images/{}".format(filename)
+        if Path(img_path).is_file():
+            os.remove(img_path)            
+        temporary_file = open(img_path, 'wb')
         temporary_file.write(PNGChunkProcessor.PNG_SIGNATURE)
         for chunk in self.chunks:
             if chunk.chunk_type in PNGChunkProcessor.CRITICAL_CHUNKS:
@@ -105,3 +111,4 @@ class PNGChunkProcessor:
                 temporary_file.write(chunk.chunk_data)
                 temporary_file.write(struct.pack('>I', chunk.chunk_crc))
         temporary_file.close()
+        return filename
