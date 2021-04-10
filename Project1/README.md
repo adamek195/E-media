@@ -54,5 +54,6 @@ The project is a png image parser. It was made for an E-media course on the stud
 
 # Authors
 Adam Bednorz
+
 Kajetan Zdanowicz
 
