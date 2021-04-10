@@ -4,11 +4,12 @@ import os
 from chunk import Chunk
 from pathlib import Path
 import matplotlib.pyplot as plt
-import numpy as np
+import numpy
 
 from IHDR_data import IHDRData
 from IDAT_filter import IDATFilter
 from PLTE_data import PLTEData
+from tIME_data import tIMEData
 
 class PNGChunkProcessor:
 
@@ -56,7 +57,7 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         recon_pixels = []
         recon_pixels = IDAT_filter.pixels_filter()
-        plt.imshow(np.array(recon_pixels).reshape((self.height,
+        plt.imshow(numpy.array(recon_pixels).reshape((self.height,
                                                             self.width, 4)))
         plt.show()
 
@@ -86,6 +87,16 @@ class PNGChunkProcessor:
         if (PLTE_data.get_amount_of_entries_in_palette()
                                                     > 2**self.bit_depth):
             raise Exception("Incorrect number of entries in palette!")
+
+    def tIME_chunk_prcessor(self):
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'tIME':
+                index = self.chunks.index(chunk)
+                tIME_data = self.chunks[index].chunk_data
+                tIME_data_values = struct.unpack('>HBBBBB', tIME_data)
+                tIME_data = tIMEData(tIME_data_values)
+                tIME_data.print_modification_date()
+
 
 
     def IEND_chunk_processor(self):
