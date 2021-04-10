@@ -51,3 +51,8 @@ The project is a png image parser. It was made for an E-media course on the stud
         contain null character. Leading or trailing spaces are also disallowed.
 
 - **tIME** : stores the time that the image was last changed.
+
+# Bibliography
+https://pyokagan.name/blog/2019-10-14-png/
+http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
+https://github.com/Hedroed/png-parser
