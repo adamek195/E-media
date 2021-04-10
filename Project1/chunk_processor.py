@@ -160,6 +160,18 @@ class PNGChunkProcessor:
             print("IEND is empty")
 
 
+    def tEXt_chunk_processor(self):
+        import sys
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'tEXt':
+                tEXt_data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
+                                                             chunk.chunk_data)
+                print("\n++++++++++++")
+                for data in tEXt_data:
+                    print(data)
+                print("++++++++++++\n")
+
+
     def create_new_image(self):
         filename = "tmp.png"
         img_path = "./images/{}".format(filename)
