@@ -12,6 +12,7 @@ from IDAT_data import IDATFilter
 from PLTE_data import PLTEData
 from tIME_data import tIMEData
 from gAMA_data import gAMAData
+from cHRM_data import cHRMData
 
 class PNGChunkProcessor:
 
@@ -67,11 +68,13 @@ class PNGChunkProcessor:
     def PLTE_chunk_processor(self):
         PLTE_chunk = []
         i = 0
+
         for chunk in self.chunks:
             if chunk.chunk_type == b'PLTE':
                 PLTE_chunk.append(chunk)
                 PLTE_index = i
             i+=1
+
         if PLTE_chunk is None:
             raise Exception("Image not have PLTE chunk")
         if self.color_type == 2 or self.color_type == 6:
@@ -81,11 +84,13 @@ class PNGChunkProcessor:
         if len(PLTE_chunk) != 1:
             raise Exception("Incorrect number of PLTE chunk")
         PLTE_length= self.chunks[PLTE_index].get_chunk_length()
+
         if PLTE_length % 3 != 0:
             raise Exception("Incorrect PLTE length - not divisible by 3")
         PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
         PLTE_data.parse_plte_data()
         PLTE_data.print_palette()
+
         if (PLTE_data.get_amount_of_entries_in_palette()
                                                     > 2**self.bit_depth):
             raise Exception("Incorrect number of entries in palette!")
@@ -122,6 +127,28 @@ class PNGChunkProcessor:
                     gAMA_data = gAMAData(gAMA_data_values)
                     gAMA_data.print_real_gamma()
 
+    def cHRM_chunk_processor(self):
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'IDAT':
+                IDAT_index = self.chunks.index(chunk)
+                break
+
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'PLTE':
+                PLTE_index = self.chunks.index(chunk)
+            else:
+                PLTE_index = math.inf
+
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'cHRM':
+                cHRM_index = self.chunks.index(chunk)
+                if IDAT_index < cHRM_index or PLTE_index < cHRM_index:
+                    raise Exception("chunk cHRM must precede the first IDAT chunk or PLTE chunk!")
+                else:
+                    cHRM_data = self.chunks[cHRM_index].chunk_data
+                    cHRM_data_values = struct.unpack('>IIIIIIII', cHRM_data)
+                    cHRM_data = cHRMData(cHRM_data_values)
+                    cHRM_data.print_chromaticity_values()
 
     def IEND_chunk_processor(self):
         number_of_chunks = len(self.chunks)

@@ -3,6 +3,7 @@ The project is a png image parser. It was made for an E-media course on the stud
 ## Requirements
 - matplotlib
 - tkinter
+- tabulate
 
 ## PNG Chunks
 

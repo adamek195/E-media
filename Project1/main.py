@@ -16,6 +16,7 @@ def choose_photo():
     chunk_processor.IDAT_chunk_processor()
     chunk_processor.tIME_chunk_prcessor()
     chunk_processor.gAMA_chunk_processor()
+    chunk_processor.cHRM_chunk_processor()
     chunk_processor.IEND_chunk_processor()
     query = chunk_processor.return_chunks_names_query()
     display_photo(chunk_processor)
