@@ -10,7 +10,7 @@ The project is a png image parser. It was made for an E-media course on the stud
 |---------|------------|--------------|---------|
 | 4 bytes | 4 bytes    | Length bytes | 4 bytes |
 
-## Critical chunks:
+## All Critical chunks parser can decode:
 
 - **IHDR** : must be the first chunk; it contains (in this order) the image's width,
         height, bit depth, color type, compression method, filter method, and
@@ -50,10 +50,3 @@ The project is a png image parser. It was made for an E-media course on the stud
         contain null character. Leading or trailing spaces are also disallowed.
 
 - **tIME** : stores the time that the image was last changed.
-
-
-# Authors
-Adam Bednorz
-
-Kajetan Zdanowicz
-
