@@ -5,11 +5,13 @@ from chunk import Chunk
 from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy
+import math
 
 from IHDR_data import IHDRData
 from IDAT_filter import IDATFilter
 from PLTE_data import PLTEData
 from tIME_data import tIMEData
+from gAMA_data import gAMAData
 
 class PNGChunkProcessor:
 
@@ -97,6 +99,28 @@ class PNGChunkProcessor:
                 tIME_data = tIMEData(tIME_data_values)
                 tIME_data.print_modification_date()
 
+    def gAMA_chunk_processor(self):
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'IDAT':
+                IDAT_index = self.chunks.index(chunk)
+                break
+
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'PLTE':
+                PLTE_index = self.chunks.index(chunk)
+            else:
+                PLTE_index = math.inf
+
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'gAMA':
+                gAMA_index = self.chunks.index(chunk)
+                if IDAT_index < gAMA_index or PLTE_index < gAMA_index:
+                    raise Exception("chunk gAMA must precede the first IDAT chunk or PLTE chunk!")
+                else:
+                    gAMA_data = self.chunks[gAMA_index].chunk_data
+                    gAMA_data_values = struct.unpack('>I', gAMA_data)
+                    gAMA_data = gAMAData(gAMA_data_values)
+                    gAMA_data.print_real_gamma()
 
 
     def IEND_chunk_processor(self):
