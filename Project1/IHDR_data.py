@@ -24,7 +24,8 @@ class IHDRData:
         return self.bit_depth
 
     def print_IHDR_data(self):
-        print("Width of image {} and height of image {}".format(self.width, self.height))
+        print("Width of image {} and height of image {}".format(self.width,
+                                                                self.height))
         print("Bit depth of image: {}".format(self.bit_depth))
         if self.color_type == 0:
             print("PNG Image Type: Grayscale")

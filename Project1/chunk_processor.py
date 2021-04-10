@@ -95,6 +95,7 @@ class PNGChunkProcessor:
                                                     > 2**self.bit_depth):
             raise Exception("Incorrect number of entries in palette!")
 
+
     def tIME_chunk_prcessor(self):
         for chunk in self.chunks:
             if chunk.chunk_type == b'tIME':
@@ -103,6 +104,7 @@ class PNGChunkProcessor:
                 tIME_data_values = struct.unpack('>HBBBBB', tIME_data)
                 tIME_data = tIMEData(tIME_data_values)
                 tIME_data.print_modification_date()
+
 
     def gAMA_chunk_processor(self):
         for chunk in self.chunks:
@@ -127,6 +129,7 @@ class PNGChunkProcessor:
                     gAMA_data = gAMAData(gAMA_data_values)
                     gAMA_data.print_real_gamma()
 
+
     def cHRM_chunk_processor(self):
         for chunk in self.chunks:
             if chunk.chunk_type == b'IDAT':
@@ -150,6 +153,7 @@ class PNGChunkProcessor:
                     cHRM_data = cHRMData(cHRM_data_values)
                     cHRM_data.print_chromaticity_values()
 
+
     def IEND_chunk_processor(self):
         number_of_chunks = len(self.chunks)
         if self.chunks[number_of_chunks-1].chunk_type != b"IEND":
@@ -161,7 +165,6 @@ class PNGChunkProcessor:
 
 
     def tEXt_chunk_processor(self):
-        import sys
         for chunk in self.chunks:
             if chunk.chunk_type == b'tEXt':
                 tEXt_data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
