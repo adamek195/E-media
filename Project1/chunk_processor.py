@@ -8,7 +8,7 @@ import numpy
 import math
 
 from IHDR_data import IHDRData
-from IDAT_filter import IDATFilter
+from IDAT_data import IDATFilter
 from PLTE_data import PLTEData
 from tIME_data import tIMEData
 from gAMA_data import gAMAData
