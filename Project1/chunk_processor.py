@@ -4,7 +4,7 @@ import os
 from chunk import Chunk
 from pathlib import Path
 import matplotlib.pyplot as plt
-import numpy as np
+import numpy
 
 from IHDR_data import IHDRData
 from IDAT_filter import IDATFilter
@@ -56,7 +56,7 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         recon_pixels = []
         recon_pixels = IDAT_filter.pixels_filter()
-        plt.imshow(np.array(recon_pixels).reshape((self.height,
+        plt.imshow(numpy.array(recon_pixels).reshape((self.height,
                                                             self.width, 4)))
         plt.show()
 
