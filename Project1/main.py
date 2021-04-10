@@ -13,7 +13,7 @@ def choose_photo():
     chunk_processor.save_chunks(img_source)
     chunk_processor.print_chunks_types()
     chunk_processor.IHDR_chunk_processor()
-    chunk_processor.PLTE_chunk_processor()
+    chunk_processor.IDAT_chunk_processor()
     chunk_processor.tIME_chunk_prcessor()
     chunk_processor.gAMA_chunk_processor()
     chunk_processor.cHRM_chunk_processor()

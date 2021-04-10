@@ -12,6 +12,7 @@ from IDAT_data import IDATFilter
 from PLTE_data import PLTEData
 from tIME_data import tIMEData
 from gAMA_data import gAMAData
+from cHRM_data import cHRMData
 
 class PNGChunkProcessor:
 
@@ -146,6 +147,8 @@ class PNGChunkProcessor:
                 else:
                     cHRM_data = self.chunks[cHRM_index].chunk_data
                     cHRM_data_values = struct.unpack('>IIIIIIII', cHRM_data)
+                    cHRM_data = cHRMData(cHRM_data_values)
+                    cHRM_data.print_chromaticity_values()
 
     def IEND_chunk_processor(self):
         number_of_chunks = len(self.chunks)
