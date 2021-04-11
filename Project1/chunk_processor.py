@@ -181,7 +181,7 @@ class PNGChunkProcessor:
                 data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
                                                              chunk.chunk_data)
                 text_chunk = iTXtData(data)
-                text_chunk.print_iTXt_data()
+                text_chunk.decode_iTXt_data()
 
 
     def zTXt_chunk_processor(self):
