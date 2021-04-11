@@ -62,9 +62,9 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         recon_pixels = []
         recon_pixels = IDAT_filter.pixels_filter()
-        plt.imshow(numpy.array(recon_pixels).reshape((self.height,
-                                                            self.width, 4)))
-        plt.show()
+        # plt.imshow(numpy.array(recon_pixels).reshape((self.height,
+        #                                                     self.width, 4)))
+        # plt.show()
 
 
     def PLTE_chunk_processor(self):
@@ -172,7 +172,7 @@ class PNGChunkProcessor:
                 data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
                                                              chunk.chunk_data)
                 text_chunk = tEXtData(data)
-                text_chunk.print_tEXt_data()
+                text_chunk.decode_tEXt_data()
 
 
     def iTXt_chunk_processor(self):
