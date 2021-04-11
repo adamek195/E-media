@@ -24,7 +24,8 @@ class IDATFilter:
 
     def recon_a(self, r, c):
         if c >= self.bytes_per_pixel:
-            return self.recon_pixels[r * self.stride + c - self.bytes_per_pixel]
+            return self.recon_pixels[r * self.stride + c -
+                                                        self.bytes_per_pixel]
         return 0
 
     def recon_b(self, r, c):
@@ -34,8 +35,8 @@ class IDATFilter:
 
     def recon_c(self, r, c):
         if r > 0 and c >= self.bytes_per_pixel:
-            return self.recon_pixels[(r-1) * self.stride + c
-                                                        - self.bytes_per_pixel]
+            return self.recon_pixels[(r-1) * self.stride + c -
+                                                         self.bytes_per_pixel]
         return 0
 
     def pixels_filter(self):
@@ -57,7 +58,7 @@ class IDATFilter:
                                                     + self.recon_b(r, c)) // 2
                 elif filter_type == 4: # Paeth
                     recon_x = filt_x + self.paeth_predictor(self.recon_a(r, c),
-                                         self.recon_b(r, c), self.recon_c(r, c))
+                                        self.recon_b(r, c), self.recon_c(r, c))
                 else:
                     raise Exception('unknown filter type: ' + str(filter_type))
                 self.recon_pixels.append(recon_x & 0xff)

@@ -1,4 +1,5 @@
 class tIMEData:
+
     def __init__(self, tIME_data):
         self.tIME_data = []
         self.tIME_data = tIME_data
@@ -21,4 +22,5 @@ class tIMEData:
         if  self.second < 10:
             self.second = "0" + str(self.second)
         print("Last modification date: {}.{}.{} {}:{}:{}".format(
-            self.day, self.month, self.year, self.hour, self.minute, self.second))
+            self.day, self.month, self.year, self.hour, self.minute,
+                                                                self.second))
