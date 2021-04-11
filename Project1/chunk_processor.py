@@ -13,7 +13,7 @@ from PLTE_data import PLTEData
 from tIME_data import tIMEData
 from gAMA_data import gAMAData
 from cHRM_data import cHRMData
-from text_chunks_data import tEXtData, iTXtData
+from text_chunks_data import tEXtData, iTXtData, zTXtData
 
 
 class PNGChunkProcessor:
@@ -180,9 +180,17 @@ class PNGChunkProcessor:
             if chunk.chunk_type == b'iTXt':
                 data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
                                                              chunk.chunk_data)
-                
                 text_chunk = iTXtData(data)
-                text_chunk.print_iEXt_data()
+                text_chunk.print_iTXt_data()
+
+
+    def zTXt_chunk_processor(self):
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'zTXt':
+                data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
+                                                             chunk.chunk_data)
+                text_chunk = zTXtData(data)
+                text_chunk.print_zTXt_data()
 
 
     def create_new_image(self):

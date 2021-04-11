@@ -13,6 +13,16 @@ class iTXtData:
     def __init__(self, data):
         self.data = data
 
-    def print_iEXt_data(self):
+    def print_iTXt_data(self):
         print("\n\niTXt:")
+        print([bytearray(row).decode('latin1') for row in self.data])
+
+
+class zTXtData:
+
+    def __init__(self, data):
+        self.data = list(data)
+
+    def print_zTXt_data(self):
+        print("\n\nzTXt:")
         print([bytearray(row).decode('latin1') for row in self.data])
