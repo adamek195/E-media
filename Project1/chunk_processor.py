@@ -13,6 +13,8 @@ from PLTE_data import PLTEData
 from tIME_data import tIMEData
 from gAMA_data import gAMAData
 from cHRM_data import cHRMData
+from tEXt_data import tEXtData
+
 
 class PNGChunkProcessor:
 
@@ -167,12 +169,10 @@ class PNGChunkProcessor:
     def tEXt_chunk_processor(self):
         for chunk in self.chunks:
             if chunk.chunk_type == b'tEXt':
-                tEXt_data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
+                data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
                                                              chunk.chunk_data)
-                print("\n++++++++++++")
-                for data in tEXt_data:
-                    print(data)
-                print("++++++++++++\n")
+                text_chunk = tEXtData(data)
+                text_chunk.print_tEXt_data()
 
 
     def create_new_image(self):
