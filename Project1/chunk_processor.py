@@ -3,17 +3,11 @@ import struct
 import os
 from chunk import Chunk
 from pathlib import Path
-import matplotlib.pyplot as plt
 import numpy
 import math
 
-from IHDR_data import IHDRData
-from IDAT_data import IDATFilter
-from PLTE_data import PLTEData
-from tIME_data import tIMEData
-from gAMA_data import gAMAData
-from cHRM_data import cHRMData
-from text_chunks_data import tEXtData, iTXtData, zTXtData
+from critical_chunks_data import IHDRData, IDATFilter, PLTEData
+from ancillary_chunks_data import gAMAData, cHRMData, sRGBData, tEXtData, iTXtData, zTXtData, tIMEData
 
 
 class PNGChunkProcessor:
@@ -60,11 +54,8 @@ class PNGChunkProcessor:
                                             if chunk.chunk_type == b'IDAT')
         IDAT_data = zlib.decompress(IDAT_data)
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
-        recon_pixels = []
-        recon_pixels = IDAT_filter.pixels_filter()
-        # plt.imshow(numpy.array(recon_pixels).reshape((self.height,
-        #                                                     self.width, 4)))
-        # plt.show()
+        information = IDAT_filter.print_recon_pixels()
+        print(information)
 
 
     def PLTE_chunk_processor(self):
@@ -76,26 +67,38 @@ class PNGChunkProcessor:
                 PLTE_chunk.append(chunk)
                 PLTE_index = i
             i+=1
-
-        if PLTE_chunk is None:
+        try:
+            PLTE_chunk is None
+        except ValueError:
             raise Exception("Image not have PLTE chunk")
+
         if self.color_type == 2 or self.color_type == 6:
-            print("PLTE chunk is optional")
+            print("\nPLTE chunk is optional")
         elif self.color_type == 3:
-            print("PLTE chunk must appear")
-        if len(PLTE_chunk) != 1:
+            print("\nPLTE chunk must appear")
+
+        try:
+            len(PLTE_chunk) != 1
+        except ValueError:
             raise Exception("Incorrect number of PLTE chunk")
-        PLTE_length= self.chunks[PLTE_index].get_chunk_length()
 
-        if PLTE_length % 3 != 0:
-            raise Exception("Incorrect PLTE length - not divisible by 3")
-        PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
-        PLTE_data.parse_plte_data()
-        PLTE_data.print_palette()
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'PLTE':
+                PLTE_length= self.chunks[PLTE_index].get_chunk_length()
+                try:
+                    PLTE_length % 3 != 0
+                except ValueError:
+                    raise Exception("Incorrect PLTE length - not divisible by 3")
 
-        if (PLTE_data.get_amount_of_entries_in_palette()
-                                                    > 2**self.bit_depth):
-            raise Exception("Incorrect number of entries in palette!")
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'PLTE':
+                PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
+                PLTE_data.parse_plte_data()
+                PLTE_data.print_palette()
+                try:
+                    PLTE_data.get_amount_of_entries_in_palette() > 2**self.bit_depth
+                except ValueError:
+                    raise Exception("Incorrect number of entries in palette!")
 
 
     def tIME_chunk_prcessor(self):
@@ -123,13 +126,14 @@ class PNGChunkProcessor:
         for chunk in self.chunks:
             if chunk.chunk_type == b'gAMA':
                 gAMA_index = self.chunks.index(chunk)
-                if IDAT_index < gAMA_index or PLTE_index < gAMA_index:
+                try:
+                    IDAT_index < gAMA_index or PLTE_index < gAMA_index
+                except ValueError:
                     raise Exception("chunk gAMA must precede the first IDAT chunk or PLTE chunk!")
-                else:
-                    gAMA_data = self.chunks[gAMA_index].chunk_data
-                    gAMA_data_values = struct.unpack('>I', gAMA_data)
-                    gAMA_data = gAMAData(gAMA_data_values)
-                    gAMA_data.print_real_gamma()
+                gAMA_data = self.chunks[gAMA_index].chunk_data
+                gAMA_data_values = struct.unpack('>I', gAMA_data)
+                gAMA_data = gAMAData(gAMA_data_values)
+                gAMA_data.print_real_gamma()
 
 
     def cHRM_chunk_processor(self):
@@ -147,14 +151,39 @@ class PNGChunkProcessor:
         for chunk in self.chunks:
             if chunk.chunk_type == b'cHRM':
                 cHRM_index = self.chunks.index(chunk)
-                if IDAT_index < cHRM_index or PLTE_index < cHRM_index:
+                try:
+                    IDAT_index < cHRM_index or PLTE_index < cHRM_index
+                except ValueError:
                     raise Exception("chunk cHRM must precede the first IDAT chunk or PLTE chunk!")
-                else:
-                    cHRM_data = self.chunks[cHRM_index].chunk_data
-                    cHRM_data_values = struct.unpack('>IIIIIIII', cHRM_data)
-                    cHRM_data = cHRMData(cHRM_data_values)
-                    cHRM_data.print_chromaticity_values()
+                cHRM_data = self.chunks[cHRM_index].chunk_data
+                cHRM_data_values = struct.unpack('>IIIIIIII', cHRM_data)
+                cHRM_data = cHRMData(cHRM_data_values)
+                cHRM_data.print_chromaticity_values()
 
+
+    def sRGB_chunk_processor(self):
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'IDAT':
+                IDAT_index = self.chunks.index(chunk)
+                break
+
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'PLTE':
+                PLTE_index = self.chunks.index(chunk)
+            else:
+                PLTE_index = math.inf
+
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'sRGB':
+                sRGB_index = self.chunks.index(chunk)
+                try:
+                    IDAT_index < sRGB_index or PLTE_index < sRGB_index
+                except ValueError:
+                    raise Exception("chunk sRGB must precede the first IDAT chunk or PLTE chunk!")
+                sRGB_data = self.chunks[sRGB_index].chunk_data
+                sRGB_data_values = struct.unpack('>B', sRGB_data)
+                sRGB_data = sRGBData(sRGB_data_values)
+                sRGB_data.print_rendering_intent()
 
     def IEND_chunk_processor(self):
         number_of_chunks = len(self.chunks)
@@ -163,6 +192,7 @@ class PNGChunkProcessor:
         IEND_data = struct.unpack('>',
                                 self.chunks[number_of_chunks - 1].chunk_data)
         if  len(IEND_data) == 0:
+            print("\nIEND:\n")
             print("IEND is empty")
 
 
