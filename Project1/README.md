@@ -32,14 +32,14 @@ The project is a png image parser. It was made for an E-media course on the stud
 - **cHRM** : gives the chromaticity coordinates of the display primaries and white
         point.
 
-- **eXIf** : stores Exif data.
-
 - **gAMA** : specifies gamma.
 
 - **iTXt** : contains a keyword and UTF-8 text, with encodings for possible
         compression and translations marked with language tag. The Extensible
         Metadata Platform (XMP) uses this chunk with a keyword
         'XML:com.adobe.xmp'
+
+- **zTXt** : contains compressed text (and a compression method marker) with the same limits as tEXt.
 
 - **sRGB** : indicates that the standard sRGB color space is used.
 
