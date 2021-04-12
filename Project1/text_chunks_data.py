@@ -8,13 +8,15 @@ class tEXtData:
         self.data = data
         self.keyword_encoded = []
         self.data_encoded = []
+        self.data_decoded = ""
+        self.keyword = ""
 
 
     def decode_tEXt_data(self):
         iterator = 0
         for elements in self.data:
             for element in elements:
-                if element is 0:
+                if element == 0:
                     break
                 self.keyword_encoded.append(element)
                 iterator += 1
@@ -27,7 +29,7 @@ class tEXtData:
                 self.data_encoded.append(elements[iterator])
                 iterator += 1
         self.data_decoded = bytearray(self.data_encoded).decode('latin1')
-        print("Data: {} \n".format(self.data_decoded))        
+        print("Data: {} \n".format(self.data_decoded))
 
 
 class iTXtData:
@@ -38,7 +40,8 @@ class iTXtData:
         self.keyword_encoded = []
         self.data_encoded = []
         self.data_decoded = []
-    
+        self.keyword = ""
+
 
     @staticmethod
     def decompress_data(data):
@@ -52,7 +55,7 @@ class iTXtData:
         iterator = 0
         for elements in self.data:
             for element in elements:
-                if element is 0:
+                if element == 0:
                     iterator += 1
                     break
                 self.keyword_encoded.append(element)
@@ -80,11 +83,13 @@ class iTXtData:
                 self.data_encoded.append(elements[iterator])
                 iterator += 1
 
-        if(is_compressed):
-            self.data_decoded = self.decompress_data(self.data_encoded).decode('utf-8')
+        if is_compressed:
+            self.data_decoded = self.decompress_data(
+                                            self.data_encoded).decode('utf-8'
+                                            )
         else:
             self.data_decoded = bytearray(self.data_encoded).decode('utf-8')
-        print("Data: {} \n".format(self.data_decoded)) 
+        print("Data: {} \n".format(self.data_decoded))
 
 
 class zTXtData:
@@ -95,7 +100,8 @@ class zTXtData:
         self.keyword_encoded = []
         self.data_encoded = []
         self.data_decoded = []
-    
+        self.keyword = ""
+
 
     @staticmethod
     def decompress_data(data):
@@ -109,7 +115,7 @@ class zTXtData:
         iterator = 0
         for elements in self.data:
             for element in elements:
-                if element is 0:
+                if element == 0:
                     break
                 self.keyword_encoded.append(element)
                 iterator += 1
@@ -129,5 +135,7 @@ class zTXtData:
                 self.data_encoded.append(elements[iterator])
                 iterator += 1
 
-        self.data_decoded = self.decompress_data(self.data_encoded).decode('latin1')
-        print("Data: {} \n".format(self.data_decoded)) 
+        self.data_decoded = self.decompress_data(
+                                            self.data_encoded).decode('latin1'
+                                            )
+        print("Data: {} \n".format(self.data_decoded))
