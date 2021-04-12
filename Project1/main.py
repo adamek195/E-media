@@ -14,6 +14,7 @@ def choose_photo():
     chunk_processor.print_chunks_types()
     chunk_processor.IHDR_chunk_processor()
     chunk_processor.IDAT_chunk_processor()
+    chunk_processor.PLTE_chunk_processor()
     chunk_processor.gAMA_chunk_processor()
     chunk_processor.cHRM_chunk_processor()
     chunk_processor.sRGB_chunk_processor()

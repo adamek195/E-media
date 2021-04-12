@@ -1,4 +1,5 @@
 import numpy
+import matplotlib.pyplot as plt
 
 
 class IHDRData:
@@ -55,6 +56,7 @@ class IDATFilter:
         self.recon_pixels = []
         self.bytes_per_pixel = 4
         self.height = height
+        self.width = width
         self.stride = width * self.bytes_per_pixel
         self.IDAT_data = []
         self.IDAT_data = IDAT_data
@@ -90,7 +92,7 @@ class IDATFilter:
                                                          self.bytes_per_pixel]
         return 0
 
-    def pixels_filter(self):
+    def print_recon_pixels(self):
         i = 0
         for r in range(self.height):
             filter_type = self.IDAT_data[i]
@@ -111,9 +113,14 @@ class IDATFilter:
                     recon_x = filt_x + self.paeth_predictor(self.recon_a(r, c),
                                         self.recon_b(r, c), self.recon_c(r, c))
                 else:
-                    raise Exception('unknown filter type: ' + str(filter_type))
+                    return ('Unknown filter type: ' + str(filter_type) +
+                                                    ' decoder can not show pixels in IDAT')
                 self.recon_pixels.append(recon_x & 0xff)
-        return self.recon_pixels
+
+        print("Recon pixels are shown by matplotlib on Figure 1")
+        plt.imshow(numpy.array(self.recon_pixels).reshape((self.height, self.width, 4)))
+        plt.show()
+        return "\nPixels are filtered and shown"
 
 
 
