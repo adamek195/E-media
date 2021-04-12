@@ -8,10 +8,7 @@ import numpy
 import math
 
 from critical_chunks_data import IHDRData, IDATFilter, PLTEData
-from tIME_data import tIMEData
-from gAMA_data import gAMAData
-from cHRM_data import cHRMData
-from text_chunks_data import tEXtData, iTXtData, zTXtData
+from ancillary_chunks_data import gAMAData, cHRMData, tEXtData, iTXtData, zTXtData, tIMEData
 
 
 class PNGChunkProcessor:

@@ -1,5 +1,6 @@
 import numpy
 
+
 class IHDRData:
 
     def __init__(self, IHDR_data_values):
@@ -44,6 +45,7 @@ class IHDRData:
         print("Compression method: {}".format(self.compression_method))
         print("Filter method: {}".format(self.filter_method))
         print("Interlace method: {}".format(self.interlace_method))
+
 
 
 class IDATFilter:
@@ -112,6 +114,7 @@ class IDATFilter:
                     raise Exception('unknown filter type: ' + str(filter_type))
                 self.recon_pixels.append(recon_x & 0xff)
         return self.recon_pixels
+
 
 
 class PLTEData:
