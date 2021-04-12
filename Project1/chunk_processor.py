@@ -190,7 +190,7 @@ class PNGChunkProcessor:
                 data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
                                                              chunk.chunk_data)
                 text_chunk = zTXtData(data)
-                text_chunk.print_zTXt_data()
+                text_chunk.decode_zTXt_data()
 
 
     def create_new_image(self):
