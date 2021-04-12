@@ -1,4 +1,4 @@
-from tkinter import Tk, Label, Button, Canvas
+from tkinter import Tk, Label, Button
 from tkinter.filedialog import askopenfilename
 from chunk_processor import PNGChunkProcessor
 from PIL import Image, ImageTk
@@ -18,8 +18,10 @@ def choose_photo():
     chunk_processor.gAMA_chunk_processor()
     chunk_processor.cHRM_chunk_processor()
     chunk_processor.tEXt_chunk_processor()
+    chunk_processor.iTXt_chunk_processor()
+    chunk_processor.zTXt_chunk_processor()
     chunk_processor.IEND_chunk_processor()
-    query = chunk_processor.return_chunks_names_query()
+    # query = chunk_processor.return_chunks_names_query()
     display_photo(chunk_processor)
 
 

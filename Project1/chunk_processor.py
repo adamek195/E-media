@@ -13,7 +13,7 @@ from PLTE_data import PLTEData
 from tIME_data import tIMEData
 from gAMA_data import gAMAData
 from cHRM_data import cHRMData
-from tEXt_data import tEXtData
+from text_chunks_data import tEXtData, iTXtData, zTXtData
 
 
 class PNGChunkProcessor:
@@ -62,9 +62,9 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         recon_pixels = []
         recon_pixels = IDAT_filter.pixels_filter()
-        plt.imshow(numpy.array(recon_pixels).reshape((self.height,
-                                                            self.width, 4)))
-        plt.show()
+        # plt.imshow(numpy.array(recon_pixels).reshape((self.height,
+        #                                                     self.width, 4)))
+        # plt.show()
 
 
     def PLTE_chunk_processor(self):
@@ -172,7 +172,25 @@ class PNGChunkProcessor:
                 data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
                                                              chunk.chunk_data)
                 text_chunk = tEXtData(data)
-                text_chunk.print_tEXt_data()
+                text_chunk.decode_tEXt_data()
+
+
+    def iTXt_chunk_processor(self):
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'iTXt':
+                data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
+                                                             chunk.chunk_data)
+                text_chunk = iTXtData(data)
+                text_chunk.decode_iTXt_data()
+
+
+    def zTXt_chunk_processor(self):
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'zTXt':
+                data = struct.unpack('{}s'.format(len(chunk.chunk_data)),
+                                                             chunk.chunk_data)
+                text_chunk = zTXtData(data)
+                text_chunk.decode_zTXt_data()
 
 
     def create_new_image(self):
