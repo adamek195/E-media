@@ -11,7 +11,6 @@ class Decompresser:
         return zlib.decompress(compressed_byte_array, -15)
 
 
-
 class gAMAData:
     def __init__(self, gAMA_data):
         print("\ngAMA:\n")
@@ -27,8 +26,8 @@ class gAMAData:
         print("The value of decoded gamma is {}".format(self.real_gamma_value))
 
 
-
 class cHRMData:
+
     def __init__(self, cHRM_data):
         print("\ncHRM:\n")
         self.cHRM_data = []
@@ -42,14 +41,13 @@ class cHRMData:
         self.blue_x = self.cHRM_data[6] / 100000
         self.blue_y = self.cHRM_data[7] / 100000
 
+
     def print_chromaticity_values(self):
         chromaticity_table = [['', 'Red', 'Green', 'Blue', 'White Point'],
         ['x', self.red_x, self.green_x, self.blue_x, self.white_point_x],
         ['y', self.red_y, self.green_y, self.blue_y, self.white_point_y]]
-
         print("Table of chromaticity values: ")
         print(tabulate(chromaticity_table))
-
 
 
 class sRGBData:
@@ -61,13 +59,18 @@ class sRGBData:
 
     def print_rendering_intent(self):
         if self.rendering_intent == 0:
-            print("Values of rendering intent is {}: Perceptual".format(self.rendering_intent))
+            print("Values of rendering intent is {}: Perceptual \
+                                            ".format(self.rendering_intent))
         elif self.rendering_intent == 1:
-            print("Values of rendering intent is {}: Relative colorimetric".format(self.rendering_intent))
+            print("Values of rendering intent is {}: Relative \
+                                colorimetric".format(self.rendering_intent))
         elif self.rendering_intent == 2:
-            print("Values of rendering intent is {}: Saturation".format(self.rendering_intent))
+            print("Values of rendering intent is {}: Saturation \
+                                            ".format(self.rendering_intent))
         elif self.rendering_intent == 3:
-            print("Values of rendering intent is {}: Absolute colorimetric".format(self.rendering_intent))
+            print("Values of rendering intent is {}: Absolute \
+                                colorimetric".format(self.rendering_intent))
+
 
 class tEXtData:
 
@@ -98,7 +101,6 @@ class tEXtData:
                 iterator += 1
         self.data_decoded = bytearray(self.data_encoded).decode('latin1')
         print("Data: {} \n".format(self.data_decoded))
-
 
 
 class iTXtData:
@@ -153,7 +155,6 @@ class iTXtData:
         print("Data: {} \n".format(self.data_decoded))
 
 
-
 class zTXtData:
 
     def __init__(self, data):
@@ -195,7 +196,6 @@ class zTXtData:
         print("Data: {} \n".format(self.data_decoded))
 
 
-
 class tIMEData:
 
     def __init__(self, tIME_data):
@@ -208,6 +208,7 @@ class tIMEData:
         self.hour = self.tIME_data[3]
         self.minute = self.tIME_data[4]
         self.second = self.tIME_data[5]
+
 
     def print_modification_date(self):
         if self.day < 10:
