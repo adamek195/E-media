@@ -1,6 +1,16 @@
 import zlib
 
 
+class Decompresser:
+
+    @staticmethod
+    def decompress_data(data):
+        compressed_byte_array = bytearray(data)
+        compressed_byte_array.pop(0)
+        compressed_byte_array.pop(0)
+        return zlib.decompress(compressed_byte_array, -15)
+
+
 class tEXtData:
 
     def __init__(self, data):
@@ -43,14 +53,6 @@ class iTXtData:
         self.keyword = ""
 
 
-    @staticmethod
-    def decompress_data(data):
-        compressed_byte_array = bytearray(data)
-        compressed_byte_array.pop(0)
-        compressed_byte_array.pop(0)
-        return zlib.decompress(compressed_byte_array, -15)
-
-
     def decode_iTXt_data(self):
         iterator = 0
         for elements in self.data:
@@ -84,7 +86,7 @@ class iTXtData:
                 iterator += 1
 
         if is_compressed:
-            self.data_decoded = self.decompress_data(
+            self.data_decoded = Decompresser.decompress_data(
                                             self.data_encoded).decode('utf-8'
                                             )
         else:
@@ -101,14 +103,6 @@ class zTXtData:
         self.data_encoded = []
         self.data_decoded = []
         self.keyword = ""
-
-
-    @staticmethod
-    def decompress_data(data):
-        compressed_byte_array = bytearray(data)
-        compressed_byte_array.pop(0)
-        compressed_byte_array.pop(0)
-        return zlib.decompress(compressed_byte_array, -15)
 
 
     def decode_zTXt_data(self):
@@ -135,7 +129,7 @@ class zTXtData:
                 self.data_encoded.append(elements[iterator])
                 iterator += 1
 
-        self.data_decoded = self.decompress_data(
+        self.data_decoded = Decompresser.decompress_data(
                                             self.data_encoded).decode('latin1'
                                             )
         print("Data: {} \n".format(self.data_decoded))
