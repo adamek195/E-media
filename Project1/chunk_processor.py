@@ -7,9 +7,7 @@ import matplotlib.pyplot as plt
 import numpy
 import math
 
-from IHDR_data import IHDRData
-from IDAT_data import IDATFilter
-from PLTE_data import PLTEData
+from critical_chunks_data import IHDRData, IDATFilter, PLTEData
 from tIME_data import tIMEData
 from gAMA_data import gAMAData
 from cHRM_data import cHRMData
@@ -62,9 +60,9 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         recon_pixels = []
         recon_pixels = IDAT_filter.pixels_filter()
-        # plt.imshow(numpy.array(recon_pixels).reshape((self.height,
-        #                                                     self.width, 4)))
-        # plt.show()
+        plt.imshow(numpy.array(recon_pixels).reshape((self.height,
+                                                             self.width, 4)))
+        plt.show()
 
 
     def PLTE_chunk_processor(self):
@@ -163,6 +161,7 @@ class PNGChunkProcessor:
         IEND_data = struct.unpack('>',
                                 self.chunks[number_of_chunks - 1].chunk_data)
         if  len(IEND_data) == 0:
+            print("\nIEND:\n")
             print("IEND is empty")
 
 
