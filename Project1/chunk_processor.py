@@ -8,7 +8,7 @@ import numpy
 import math
 
 from critical_chunks_data import IHDRData, IDATFilter, PLTEData
-from ancillary_chunks_data import gAMAData, cHRMData, tEXtData, iTXtData, zTXtData, tIMEData
+from ancillary_chunks_data import gAMAData, cHRMData, sRGBData, tEXtData, iTXtData, zTXtData, tIMEData
 
 
 class PNGChunkProcessor:
@@ -150,6 +150,29 @@ class PNGChunkProcessor:
                     cHRM_data = cHRMData(cHRM_data_values)
                     cHRM_data.print_chromaticity_values()
 
+
+    def sRGB_chunk_processor(self):
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'IDAT':
+                IDAT_index = self.chunks.index(chunk)
+                break
+
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'PLTE':
+                PLTE_index = self.chunks.index(chunk)
+            else:
+                PLTE_index = math.inf
+
+        for chunk in self.chunks:
+            if chunk.chunk_type == b'sRGB':
+                sRGB_index = self.chunks.index(chunk)
+                if IDAT_index < sRGB_index or PLTE_index < sRGB_index:
+                    raise Exception("chunk sRGB must precede the first IDAT chunk or PLTE chunk!")
+                else:
+                    sRGB_data = self.chunks[sRGB_index].chunk_data
+                    sRGB_data_values = struct.unpack('>B', sRGB_data)
+                    sRGB_data = sRGBData(sRGB_data_values)
+                    sRGB_data.print_rendering_intent()
 
     def IEND_chunk_processor(self):
         number_of_chunks = len(self.chunks)

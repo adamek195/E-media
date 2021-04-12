@@ -120,6 +120,7 @@ class IDATFilter:
 class PLTEData:
 
     def __init__(self, PLTE_data):
+        print("\nPLTE:\n")
         self.PLTE_data = []
         self.PLTE_data = PLTE_data
         self.palette = []

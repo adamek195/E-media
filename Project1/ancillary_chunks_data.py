@@ -52,6 +52,23 @@ class cHRMData:
 
 
 
+class sRGBData:
+    def __init__(self, sRBG_data):
+        print("\nsRGB:\n")
+        self.sRBG_data = []
+        self.sRBG_data = sRBG_data
+        self.rendering_intent = self.sRBG_data[0]
+
+    def print_rendering_intent(self):
+        if self.rendering_intent == 0:
+            print("Values of rendering intent is {}: Perceptual".format(self.rendering_intent))
+        elif self.rendering_intent == 1:
+            print("Values of rendering intent is {}: Relative colorimetric".format(self.rendering_intent))
+        elif self.rendering_intent == 2:
+            print("Values of rendering intent is {}: Saturation".format(self.rendering_intent))
+        elif self.rendering_intent == 3:
+            print("Values of rendering intent is {}: Absolute colorimetric".format(self.rendering_intent))
+
 class tEXtData:
 
     def __init__(self, data):
