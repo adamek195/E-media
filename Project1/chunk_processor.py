@@ -3,26 +3,29 @@ import struct
 import os
 from chunk import Chunk
 from pathlib import Path
-import numpy
 import math
 
 from critical_chunks_data import IHDRData, IDATFilter, PLTEData
-from ancillary_chunks_data import gAMAData, cHRMData, sRGBData, tEXtData, iTXtData, zTXtData, tIMEData
-
+from ancillary_chunks_data import (
+    gAMAData, cHRMData, sRGBData, tEXtData, iTXtData, zTXtData, tIMEData
+)
 
 class PNGChunkProcessor:
 
     PNG_SIGNATURE = b'\x89PNG\r\n\x1a\n'
     CRITICAL_CHUNKS = [b'IHDR', b'PLTE', b'IDAT', b'IEND']
 
+
     def __init__(self):
         self.chunks = []
+
 
     @staticmethod
     def validate_png(img):
         if (img.read(len(PNGChunkProcessor.PNG_SIGNATURE))
                                         != PNGChunkProcessor.PNG_SIGNATURE):
             raise Exception('Invalid PNG Signature')
+
 
     def save_chunks(self, img):
         self.validate_png(img)
@@ -32,11 +35,10 @@ class PNGChunkProcessor:
             if new_chunk.chunk_type == b'IEND':
                 break
 
+
     def print_chunks_types(self):
         print([chunk.chunk_type for chunk in self.chunks])
 
-    def return_chunks_names_query(self):
-        return "  ".join([str(chunk.chunk_type) for chunk in self.chunks])
 
     def IHDR_chunk_processor(self):
         IHDR_data = self.chunks[0].chunk_data
@@ -88,7 +90,8 @@ class PNGChunkProcessor:
                 try:
                     PLTE_length % 3 != 0
                 except ValueError:
-                    raise Exception("Incorrect PLTE length - not divisible by 3")
+                    raise Exception("Incorrect PLTE length - not divisible \
+                                                                        by 3")
 
         for chunk in self.chunks:
             if chunk.chunk_type == b'PLTE':
@@ -129,7 +132,8 @@ class PNGChunkProcessor:
                 try:
                     IDAT_index < gAMA_index or PLTE_index < gAMA_index
                 except ValueError:
-                    raise Exception("chunk gAMA must precede the first IDAT chunk or PLTE chunk!")
+                    raise Exception("chunk gAMA must precede the first IDAT \
+                                                        chunk or PLTE chunk!")
                 gAMA_data = self.chunks[gAMA_index].chunk_data
                 gAMA_data_values = struct.unpack('>I', gAMA_data)
                 gAMA_data = gAMAData(gAMA_data_values)
@@ -154,7 +158,8 @@ class PNGChunkProcessor:
                 try:
                     IDAT_index < cHRM_index or PLTE_index < cHRM_index
                 except ValueError:
-                    raise Exception("chunk cHRM must precede the first IDAT chunk or PLTE chunk!")
+                    raise Exception("chunk cHRM must precede the first IDAT \
+                                                        chunk or PLTE chunk!")
                 cHRM_data = self.chunks[cHRM_index].chunk_data
                 cHRM_data_values = struct.unpack('>IIIIIIII', cHRM_data)
                 cHRM_data = cHRMData(cHRM_data_values)
@@ -179,11 +184,13 @@ class PNGChunkProcessor:
                 try:
                     IDAT_index < sRGB_index or PLTE_index < sRGB_index
                 except ValueError:
-                    raise Exception("chunk sRGB must precede the first IDAT chunk or PLTE chunk!")
+                    raise Exception("chunk sRGB must precede the first IDAT \
+                                                        chunk or PLTE chunk!")
                 sRGB_data = self.chunks[sRGB_index].chunk_data
                 sRGB_data_values = struct.unpack('>B', sRGB_data)
                 sRGB_data = sRGBData(sRGB_data_values)
                 sRGB_data.print_rendering_intent()
+
 
     def IEND_chunk_processor(self):
         number_of_chunks = len(self.chunks)

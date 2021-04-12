@@ -2,7 +2,7 @@ from tkinter import Tk, Label, Button
 from tkinter.filedialog import askopenfilename
 from chunk_processor import PNGChunkProcessor
 from PIL import Image, ImageTk
-
+from fourier import Fourier
 root = Tk()
 
 
@@ -23,7 +23,7 @@ def choose_photo():
     chunk_processor.zTXt_chunk_processor()
     chunk_processor.tIME_chunk_prcessor()
     chunk_processor.IEND_chunk_processor()
-    # query = chunk_processor.return_chunks_names_query()
+    Fourier.show_plots(img_path)
     display_photo(chunk_processor)
 
 
