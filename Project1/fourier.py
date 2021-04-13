@@ -16,10 +16,10 @@ class Fourier:
         image_4 = np.fft.ifft2(image_2)
 
         plt.subplot(221), plt.imshow(image_1, "gray"), plt.title("Image")
-        plt.subplot(222), plt.imshow(20*np.log(1+np.abs(image_2)),
+        plt.subplot(222), plt.imshow(np.log(np.abs(image_2)),
                                                 "gray"), plt.title("Spectrum")
-        plt.subplot(223), plt.imshow(20*np.log(1+np.abs(image_3)),
+        plt.subplot(223), plt.imshow(np.log(np.abs(image_3)),
                                                 "gray"), plt.title("Centered")
-        plt.subplot(224), plt.imshow(np.angle(image_4),
+        plt.subplot(224), plt.imshow(np.log(np.abs(0.001+np.angle(image_3))),
                                                     "gray"), plt.title("Phase")
         plt.show()
