@@ -10,6 +10,7 @@ from ancillary_chunks_data import (
     gAMAData, cHRMData, sRGBData, tEXtData, iTXtData, zTXtData, tIMEData
 )
 
+
 class PNGChunkProcessor:
 
     PNG_SIGNATURE = b'\x89PNG\r\n\x1a\n'
