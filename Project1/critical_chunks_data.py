@@ -157,3 +157,6 @@ class PLTEData:
 
     def get_amount_of_entries_in_palette(self):
         return len(self.palette)
+
+    def show_palette(self):
+        print("here will be image")
