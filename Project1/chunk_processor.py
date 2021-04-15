@@ -99,6 +99,7 @@ class PNGChunkProcessor:
                 PLTE_data = PLTEData(PLTE_chunk[0].chunk_data)
                 PLTE_data.parse_plte_data()
                 PLTE_data.print_palette()
+                PLTE_data.show_palette()
                 try:
                     PLTE_data.get_amount_of_entries_in_palette() > 2**self.bit_depth
                 except ValueError:
