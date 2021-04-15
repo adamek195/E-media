@@ -1,7 +1,6 @@
 import numpy
 import matplotlib.pyplot as plt
 
-
 class IHDRData:
 
     def __init__(self, IHDR_data_values):
@@ -160,13 +159,7 @@ class PLTEData:
 
     def show_palette(self):
         palette = numpy.array(self.palette)
-        plt.figure(figsize=(5, 5))
-        plt.title('Palette plot')
-        plt.imshow(palette)
-        plt.show()
-        plt.figure(figsize=(10, 6))
-        plt.subplot(221),plt.title('Palette plot first 64 pixels'), plt.imshow(palette), plt.ylim([0, 64])
-        plt.subplot(222),plt.title('Palette plot second 64 pixels'), plt.imshow(palette), plt.ylim([65, 128])
-        plt.subplot(223),plt.title('Palette plot last 64 pixels'), plt.imshow(palette), plt.ylim([129, 192])
-        plt.subplot(224),plt.title('Palette plot last 63 pixels'), plt.imshow(palette), plt.ylim([193, 255])
+        indices = numpy.arange(256).reshape(16,16)
+        plt.title("Palette plot")
+        plt.imshow(palette[indices])
         plt.show()
