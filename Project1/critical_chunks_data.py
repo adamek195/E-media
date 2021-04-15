@@ -129,6 +129,7 @@ class IDATFilter:
         print("Recon pixels are shown by matplotlib on Figure 1")
         plt.imshow(numpy.array(self.recon_pixels).reshape((self.height,
                                                             self.width, 4)))
+        plt.title('Recon pixels plot')
         plt.show()
         return "\nPixels are filtered and shown"
 
@@ -148,7 +149,6 @@ class PLTEData:
             pixel = (raw_pixel[0], raw_pixel[1], raw_pixel[2])
             self.palette.append(pixel)
 
-
     def print_palette(self):
         palette = numpy.array(self.palette)
         palette = numpy.reshape(self.palette, (-1,3))
@@ -159,4 +159,8 @@ class PLTEData:
         return len(self.palette)
 
     def show_palette(self):
-        print("here will be image")
+        palette = numpy.array(self.palette)
+        plt.figure(figsize=(5, 5))
+        plt.title('Palette plot')
+        plt.imshow(palette)
+        plt.show()
