@@ -13,7 +13,7 @@ class Fourier:
 
         image_2 = np.fft.fft2(image_1)
         image_3 = np.fft.fftshift(image_2)
-        image_4 = np.fft.ifft2(image_2)
+        #image_4 = np.fft.ifft2(image_2)
 
         plt.subplot(221), plt.imshow(image_1, "gray"), plt.title("Image")
         plt.subplot(222), plt.imshow(np.log(np.abs(image_2)),
