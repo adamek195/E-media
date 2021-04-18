@@ -1,6 +1,6 @@
 # E-media Project 1
 
-The project is a png image parser. It was made for an E-media course on the studies of Control Engineering and Robotics at the Wrocław University of Technology and Technology.
+The project is a png image parser. It was made for an E-media course on the studies of Control Engineering and Robotics at the Wrocław University of Science and Technology.
 ## Requirements
 
 - matplotlib
