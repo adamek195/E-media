@@ -125,7 +125,7 @@ IEND is empty
 
 Recon pixels:
 
-![Pixels](screenshots/pixels.PNG "Pixels")
+![Pixels](screenshots/pixels.PNG =50x50)
 
 If the image has PLTE(cubes.png doesn't have) chunk you will see a processed palette:
 
