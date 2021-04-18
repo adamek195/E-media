@@ -1,6 +1,6 @@
 # E-media
 
-The project was made for an E-media course on the studies of Control Engineering and Robotics on specialization Information Technologies in Control Engineering at the Wrocław University of Technology and Technology.
+The project was made for an E-media course on the studies of Control Engineering and Robotics on specialization Information Technologies in Control Engineering at the Wrocław University of Science and Technology.
 The project consists of 2 parts:
 
 - png image parser
