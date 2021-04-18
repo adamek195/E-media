@@ -1,6 +1,8 @@
 # E-media Project 1
+
 The project is a png image parser. It was made for an E-media course on the studies of Control Engineering and Robotics at the Wrocław University of Technology and Technology.
 ## Requirements
+
 - matplotlib
 - tkinter
 - tabulate
@@ -52,7 +54,95 @@ The project is a png image parser. It was made for an E-media course on the stud
 
 - **tIME** : stores the time that the image was last changed.
 
+## How to run
+
+1. In command line write:
+
+```shell
+python main.py
+```
+
+2. You will see GUI, press button 'load photo'. GUI can only load png files:
+
+![Menu](screenshots/menu.PNG "Menu")
+
+3. Afterload png file you will see processed chunks:
+
+For example cubes.png:
+
+```shell
+[b'IHDR', b'gAMA', b'cHRM', b'bKGD', b'tIME', b'IDAT', b'IDAT', b'tEXt', b'tEXt', b'IEND']
+
+IHDR:
+
+Width of image 240 and height of image 180
+Bit depth of image: 8
+PNG Image Type: Truecolor with alpha
+Compression method: 0
+Filter method: 0
+Interlace method: 0
+
+IDAT:
+
+Recon pixels are shown by matplotlib on Figure 1
+
+Pixels are filtered and shown
+
+PLTE chunk is optional
+
+gAMA:
+
+The value of decoded gamma is 0.45455
+
+cHRM:
+
+Table of chromaticity values:
+-  ----  -----  ----  -----------
+   Red   Green  Blue  White Point
+x  0.64  0.3    0.15  0.3127
+y  0.33  0.6    0.06  0.329
+-  ----  -----  ----  -----------
+
+tEXt:
+
+Keyword: date:create
+Data: 2020-09-26T19:16:45+00:00
+
+
+tEXt:
+
+Keyword: date:modify
+Data: 2020-09-26T19:16:45+00:00
+
+
+tIME:
+
+Last modification date: 26.09.2020 19:16:45
+
+IEND:
+IEND is empty
+```
+
+Recon pixels:
+
+![Pixels](screenshots/pixels.PNG "Pixels")
+
+If the image has PLTE(cubes.png doesn't have) chunk you will see a processed palette:
+
+![Palette](screenshots/palette.PNG "Palette")
+
+4. After processed chunks you will see Fast Fourier transform of the loaded image png:
+
+![fft](screenshots/fft.PNG "fft")
+
+5. At the end you will see saved png image only with critical chunks in GPU:
+
+![save](screenshots/save.PNG "save")
+
 ## Bibliography
+
 - https://pyokagan.name/blog/2019-10-14-png/
 - http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
 - https://github.com/Hedroed/png-parser
+- https://stackoverflow.com/questions/1089662/python-inflate-and-deflate-implementations
+- https://stackoverflow.com/questions/44497352/printing-one-color-using-imshow
