@@ -1,6 +1,7 @@
 # E-media Project 1
 
 The project is a png image parser. It was made for an E-media course on the studies of Control Engineering and Robotics at the Wrocław University of Science and Technology.
+
 ## Requirements
 
 - matplotlib
@@ -13,7 +14,7 @@ The project is a png image parser. It was made for an E-media course on the stud
 |---------|------------|--------------|---------|
 | 4 bytes | 4 bytes    | Length bytes | 4 bytes |
 
-## All Critical chunks parser can decode:
+## All Critical chunks parser can decode
 
 - **IHDR** : must be the first chunk; it contains (in this order) the image's width,
         height, bit depth, color type, compression method, filter method, and
@@ -29,7 +30,7 @@ The project is a png image parser. It was made for an E-media course on the stud
 
 - **IEND** : marks the image end.
 
-## Ancillary chunks, which parser can decode:
+## Ancillary chunks, which parser can decode
 
 - **cHRM** : gives the chromaticity coordinates of the display primaries and white
         point.

@@ -15,5 +15,6 @@ repos:
           --disable=import-error,
           --disable=missing-docstring,
           --disable=empty-docstring,
-          --max-line-length=80
+          --max-line-length=80,
+          --disable=invalid-name
           ]
