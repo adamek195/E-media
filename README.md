@@ -152,6 +152,7 @@ If the image has PLTE(cubes.png doesn't have) chunk you will see a processed pal
 - https://github.com/Hedroed/png-parser
 - https://stackoverflow.com/questions/1089662/python-inflate-and-deflate-implementations
 - https://stackoverflow.com/questions/44497352/printing-one-color-using-imshow
+- https://medium.com/@prudywsh/how-to-generate-big-prime-numbers-miller-rabin-49e6e6af32fb
 
 ## Authors
 

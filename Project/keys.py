@@ -60,11 +60,3 @@ class Keys:
         private_key = {"d": self.d, "n": self.n}
         return private_key
 
-
-keys = Keys()
-public_key = keys.generate_public_key()
-print(public_key)
-print("\n\n\n\n")
-private_key = keys.generate_private_key()
-print(private_key)
-
