@@ -3,7 +3,7 @@ from random import randrange, getrandbits
 class PrimeGenerator:
 
     @staticmethod
-    def rabin_miller_test(num):
+    def rabin_miller_test(num, k=10):
 
         s = num - 1
         t = 0
@@ -11,7 +11,7 @@ class PrimeGenerator:
         while s % 2 == 0:
             s = s // 2
             t += 1
-        for trials in range(10):
+        for trials in range(k):
             a = randrange(2, num - 1)
             v = pow(a, s, num)
             if v != 1:
@@ -25,13 +25,13 @@ class PrimeGenerator:
             return True
 
     @staticmethod
-    def is_prime(num):
+    def is_prime(num, k):
         if num == 2 or num == 3:
             return True
         if num <= 1 or num % 2 == 0:
             return False
 
-        return PrimeGenerator.rabin_miller_test(num)
+        return PrimeGenerator.rabin_miller_test(num, k)
 
     @staticmethod
     def generate_prime_candidate(length):
@@ -43,9 +43,6 @@ class PrimeGenerator:
     def generate_prime_number(length=1024):
         prime = 4
 
-        while not PrimeGenerator.is_prime(prime):
+        while not PrimeGenerator.is_prime(prime, k=10):
             prime = PrimeGenerator.generate_prime_candidate(length)
         return prime
-
-
-print(PrimeGenerator.generate_prime_number())
