@@ -59,4 +59,3 @@ class Keys:
 
         private_key = {"d": self.d, "n": self.n}
         return private_key
-
