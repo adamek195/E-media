@@ -125,6 +125,7 @@ class IDATFilter:
                                         ' decoder can not show pixels in IDAT')
                 self.recon_pixels.append(recon_x & 0xff)
 
+        print(self.recon_pixels)
         print("Recon pixels are shown by matplotlib on Figure 1")
         plt.imshow(numpy.array(self.recon_pixels).reshape((self.height,
                                                             self.width, 4)))
