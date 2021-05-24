@@ -64,7 +64,6 @@ class IDATFilter:
         self.IDAT_data = []
         self.IDAT_data = IDAT_data
 
-
     @staticmethod
     def paeth_predictor(a, b, c):
         p = a + b - c
@@ -125,13 +124,18 @@ class IDATFilter:
                                         ' decoder can not show pixels in IDAT')
                 self.recon_pixels.append(recon_x & 0xff)
 
-        print(self.recon_pixels)
         print("Recon pixels are shown by matplotlib on Figure 1")
         plt.imshow(numpy.array(self.recon_pixels).reshape((self.height,
                                                             self.width, 4)))
         plt.title('Recon pixels plot')
         plt.show()
         return "\nPixels are filtered and shown"
+
+    def get_compress_data(self):
+        return self.recon_pixels
+
+    def get_decompress_data(self):
+        return self.IDAT_data
 
 
 class PLTEData:
@@ -164,3 +168,5 @@ class PLTEData:
         plt.title("Palette plot")
         plt.imshow(palette[indices])
         plt.show()
+
+

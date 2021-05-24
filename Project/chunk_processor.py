@@ -5,6 +5,8 @@ from chunk import Chunk
 from pathlib import Path
 import math
 
+from keys import Keys
+from rsa import RSA
 from critical_chunks_data import IHDRData, IDATFilter, PLTEData
 from ancillary_chunks_data import (
     gAMAData, cHRMData, sRGBData, tEXtData, iTXtData, zTXtData, tIMEData
@@ -19,6 +21,8 @@ class PNGChunkProcessor:
 
     def __init__(self):
         self.chunks = []
+        self.encrypt_data = []
+        self.decrypt_data = []
 
 
     @staticmethod
@@ -59,6 +63,13 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         information = IDAT_filter.print_recon_pixels()
         print(information)
+        keys = Keys()
+        public_key = keys.generate_public_key()
+        private_key = keys.generate_private_key()
+        ecb = RSA(public_key, private_key)
+        compress_data = []
+        compress_data = IDAT_filter.get_compress_data()
+        self.encrypt_data = ecb.ecb_encrypt_compress(compress_data)
 
 
     def PLTE_chunk_processor(self):
@@ -241,6 +252,30 @@ class PNGChunkProcessor:
         temporary_file.write(PNGChunkProcessor.PNG_SIGNATURE)
         for chunk in self.chunks:
             if chunk.chunk_type in PNGChunkProcessor.CRITICAL_CHUNKS:
+                temporary_file.write(struct.pack('>I', chunk.chunk_length))
+                temporary_file.write(chunk.chunk_type)
+                temporary_file.write(chunk.chunk_data)
+                temporary_file.write(struct.pack('>I', chunk.chunk_crc))
+        temporary_file.close()
+        return filename
+
+    def create_ecb_image(self):
+        filename = "ecb.png"
+        img_path = "./images/{}".format(filename)
+        if Path(img_path).is_file():
+            os.remove(img_path)
+        temporary_file = open(img_path, 'wb')
+        temporary_file.write(PNGChunkProcessor.PNG_SIGNATURE)
+        for chunk in self.chunks:
+            if chunk.chunk_type in [b'IDAT']:
+                new_data = zlib.compress(self.encrypt_data, 9)
+                new_crc = zlib.crc32(new_data, zlib.crc32(struct.pack('>4s', b'IDAT')))
+                chunk_len = len(new_data)
+                temporary_file.write(struct.pack('>I', chunk_len))
+                temporary_file.write(chunk.chunk_type)
+                temporary_file.write(new_data)
+                temporary_file.write(struct.pack('>I', new_crc))
+            else:
                 temporary_file.write(struct.pack('>I', chunk.chunk_length))
                 temporary_file.write(chunk.chunk_type)
                 temporary_file.write(chunk.chunk_data)

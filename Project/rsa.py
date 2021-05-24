@@ -1,38 +1,50 @@
 from keys import Keys
-
+import sys
 
 class RSA:
 
-    @staticmethod
-    def encrypt(public_key, data):
-        encrypted_data = []
+    def __init__(self, public_key, private_key):
+        self.public_key = public_key
+        self.private_key = private_key
 
-        for t in data:
-            c = pow(t, public_key['e'], public_key['n'])
-            encrypted_data.append(c)
+    def power(self, x, m, n):
+        a = 1
+        while m > 0:
+            if m % 2 == 1:
+                a = (a * x) % n
+            x = (x * x) % n
+            m //= 2
+        return a
 
+    def encrypting(self, num):
+        result = self.power(num, self.public_key['e'], self.public_key['n'])
+        return result
+
+
+    def decrypting(self, num):
+        result = self.power(num, self.private_key['d'], self.private_key['n'])
+        return result
+
+    def ecb_encrypt_compress(self, IDAT_data_compress):
+        key_size = self.public_key['n'].bit_length()
+        block_size = key_size//8
+        encrypted_data = bytearray()
+        padding = bytearray()
+        for i in range(0, len(IDAT_data_compress), block_size):
+            bytes_block = bytearray(IDAT_data_compress[i:i+block_size])
+
+            #padding
+            if len(bytes_block)%block_size != 0:
+                for empty in range(block_size - (len(bytes_block)%block_size)):
+                    padding.append(0)
+                bytes_block = padding + bytes_block
+
+            int_block = int.from_bytes(bytes_block, 'big')
+            encrypt_block_int = self.encrypting(int_block)
+            encrypt_block_bytes = encrypt_block_int.to_bytes(block_size+1, 'big')
+            encrypt_block_bytes = encrypt_block_bytes[:-1]
+            encrypted_data += encrypt_block_bytes
         return encrypted_data
 
-    @staticmethod
-    def decrypt(private_key, data):
-        decrypted_data = []
-
-        for c in data:
-            t = pow(c, private_key['d'], private_key['n'])
-            decrypted_data.append(t)
-
-        return decrypted_data
-
-results = [6, 2, 3, 5, 3, 6, 6, 6, 7, 8, 9, 9, 12, 455]
-keys = Keys()
-public_key = keys.generate_public_key()
-private_key = keys.generate_private_key()
-
-data = RSA.encrypt(public_key,results)
-
-print(data)
-
-data = RSA.decrypt(private_key, data)
-
-print(data)
+    def ecb_decrypt_compress(self, encrypted_data):
 
