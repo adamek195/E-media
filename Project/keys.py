@@ -59,3 +59,6 @@ class Keys:
 
         private_key = {"d": self.d, "n": self.n}
         return private_key
+
+    def get_key_size(self):
+        return self.key_size

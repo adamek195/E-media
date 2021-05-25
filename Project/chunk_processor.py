@@ -5,6 +5,8 @@ from chunk import Chunk
 from pathlib import Path
 import math
 
+from PIL.Image import new
+
 from keys import Keys
 from rsa import RSA
 from critical_chunks_data import IHDRData, IDATFilter, PLTEData
@@ -22,6 +24,7 @@ class PNGChunkProcessor:
     def __init__(self):
         self.chunks = []
         self.encrypt_data = []
+        self.after_iend_data = []
         self.decrypt_data = []
 
 
@@ -63,13 +66,13 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         information = IDAT_filter.print_recon_pixels()
         print(information)
-        keys = Keys()
+        keys = Keys(64)
         public_key = keys.generate_public_key()
         private_key = keys.generate_private_key()
         ecb = RSA(public_key, private_key)
         compress_data = []
         compress_data = IDAT_filter.get_compress_data()
-        self.encrypt_data = ecb.ecb_encrypt_compress(compress_data)
+        self.encrypt_data, self.after_iend_data = ecb.ecb_encrypt_compress(compress_data)
 
 
     def PLTE_chunk_processor(self):
@@ -276,9 +279,11 @@ class PNGChunkProcessor:
                 temporary_file.write(new_data)
                 temporary_file.write(struct.pack('>I', new_crc))
             else:
-                temporary_file.write(struct.pack('>I', chunk.chunk_length))
+                chunk_len = len(chunk.chunk_data)
+                temporary_file.write(struct.pack('>I', chunk_len))
                 temporary_file.write(chunk.chunk_type)
                 temporary_file.write(chunk.chunk_data)
                 temporary_file.write(struct.pack('>I', chunk.chunk_crc))
+        temporary_file.write(self.after_iend_data)
         temporary_file.close()
         return filename
