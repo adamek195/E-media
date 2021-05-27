@@ -66,7 +66,7 @@ class PNGChunkProcessor:
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         information = IDAT_filter.print_recon_pixels()
         print(information)
-        keys = Keys(64)
+        keys = Keys()
         public_key = keys.generate_public_key()
         private_key = keys.generate_private_key()
         ecb = RSA(public_key, private_key)

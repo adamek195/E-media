@@ -61,5 +61,3 @@ class RSA:
             decrypted_data += decrypted_block_bytes
             k+=1
         return decrypted_data
-
-
