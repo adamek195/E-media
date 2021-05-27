@@ -24,7 +24,7 @@ class RSA:
 
     def ecb_encrypt(self, IDAT_data):
         key_size = self.public_key['n'].bit_length()
-        block_size = key_size//8 - 1
+        block_size = key_size//8-1
         encrypted_data = bytearray()
         padding = bytearray()
         after_iend_data = bytearray()
@@ -38,11 +38,28 @@ class RSA:
                 bytes_block = padding + bytes_block
 
             int_block = int.from_bytes(bytes_block, 'big')
-            encrypt_block_int = pow(int_block, self.public_key['e'], self.public_key['n'])
+            encrypt_block_int = self.encrypting(int_block)
             encrypt_block_bytes = encrypt_block_int.to_bytes(block_size+1, 'big')
             after_iend_data.append(encrypt_block_bytes[-1])
             encrypt_block_bytes = encrypt_block_bytes[:-1]
             encrypted_data += encrypt_block_bytes
 
         return encrypted_data, after_iend_data
+
+
+
+    def ecb_decrypt(self, encrypted_data, after_iend_data):
+        key_size = self.private_key['n'].bit_length()
+        decrypted_data = bytearray()
+        block_size = key_size//8-1
+        k=0
+        for i in range(0, len(encrypted_data), block_size):
+            encrypted_block_bytes = encrypted_data[i:i+block_size] + after_iend_data[k].to_bytes(1, 'big')
+            encrypted_block_int = int.from_bytes(encrypted_block_bytes, 'big')
+            decrypted_block_int = self.decrypting(encrypted_block_int)
+            decrypted_block_bytes = decrypted_block_int.to_bytes(block_size, 'big')
+            decrypted_data += decrypted_block_bytes
+            k+=1
+        return decrypted_data
+
 
