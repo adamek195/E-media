@@ -23,9 +23,9 @@ class PNGChunkProcessor:
 
     def __init__(self):
         self.chunks = []
-        self.encrypt_data = []
-        self.after_iend_data = []
-        self.decrypt_data = []
+        self.encrypt_data = bytearray()
+        self.after_iend_data = bytearray()
+        self.decrypt_data = bytearray()
 
 
     @staticmethod
@@ -70,9 +70,7 @@ class PNGChunkProcessor:
         public_key = keys.generate_public_key()
         private_key = keys.generate_private_key()
         ecb = RSA(public_key, private_key)
-        compress_data = []
-        compress_data = IDAT_filter.get_compress_data()
-        self.encrypt_data, self.after_iend_data = ecb.ecb_encrypt_compress(compress_data)
+        self.encrypt_data, self.after_iend_data = ecb.ecb_encrypt(IDAT_data)
 
 
     def PLTE_chunk_processor(self):
@@ -270,20 +268,18 @@ class PNGChunkProcessor:
         temporary_file = open(img_path, 'wb')
         temporary_file.write(PNGChunkProcessor.PNG_SIGNATURE)
         for chunk in self.chunks:
-            if chunk.chunk_type in [b'IDAT']:
-                new_data = zlib.compress(self.encrypt_data, 9)
-                new_crc = zlib.crc32(new_data, zlib.crc32(struct.pack('>4s', b'IDAT')))
-                chunk_len = len(new_data)
-                temporary_file.write(struct.pack('>I', chunk_len))
-                temporary_file.write(chunk.chunk_type)
-                temporary_file.write(new_data)
-                temporary_file.write(struct.pack('>I', new_crc))
-            else:
-                chunk_len = len(chunk.chunk_data)
-                temporary_file.write(struct.pack('>I', chunk_len))
+            if chunk.chunk_type in PNGChunkProcessor.CRITICAL_CHUNKS:
+                if chunk.chunk_type in [b'IDAT']:
+                    new_data = zlib.compress(self.encrypt_data, 9)
+                    new_crc = zlib.crc32(new_data, zlib.crc32(struct.pack('>4s', b'IDAT')))
+                    chunk_len = len(new_data)
+                    temporary_file.write(struct.pack('>I', chunk_len))
+                    temporary_file.write(chunk.chunk_type)
+                    temporary_file.write(new_data)
+                    temporary_file.write(struct.pack('>I', new_crc))
+                temporary_file.write(struct.pack('>I', chunk.chunk_length))
                 temporary_file.write(chunk.chunk_type)
                 temporary_file.write(chunk.chunk_data)
                 temporary_file.write(struct.pack('>I', chunk.chunk_crc))
-        temporary_file.write(self.after_iend_data)
         temporary_file.close()
         return filename

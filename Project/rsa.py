@@ -1,6 +1,3 @@
-import sys
-from collections import deque
-
 class RSA:
 
     def __init__(self, public_key, private_key):
@@ -25,15 +22,14 @@ class RSA:
         result = self.power(num, self.private_key['d'], self.private_key['n'])
         return result
 
-    def ecb_encrypt_compress(self, IDAT_data_compress):
+    def ecb_encrypt(self, IDAT_data):
         key_size = self.public_key['n'].bit_length()
-        block_size = key_size//8
+        block_size = key_size//8 - 1
         encrypted_data = bytearray()
         padding = bytearray()
         after_iend_data = bytearray()
-        self.original_data_len = len(IDAT_data_compress)
-        for i in range(0, len(IDAT_data_compress), block_size):
-            bytes_block = bytearray(IDAT_data_compress[i:i+block_size])
+        for i in range(0, len(IDAT_data), block_size):
+            bytes_block = bytes(IDAT_data[i:i+block_size])
 
             #padding
             if len(bytes_block)%block_size != 0:
@@ -42,7 +38,7 @@ class RSA:
                 bytes_block = padding + bytes_block
 
             int_block = int.from_bytes(bytes_block, 'big')
-            encrypt_block_int = self.encrypting(int_block)
+            encrypt_block_int = pow(int_block, self.public_key['e'], self.public_key['n'])
             encrypt_block_bytes = encrypt_block_int.to_bytes(block_size+1, 'big')
             after_iend_data.append(encrypt_block_bytes[-1])
             encrypt_block_bytes = encrypt_block_bytes[:-1]

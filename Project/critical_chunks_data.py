@@ -54,7 +54,7 @@ class IHDRData:
 
 class IDATFilter:
 
-    def __init__(self,width,height, IDAT_data):
+    def __init__(self, width, height, IDAT_data):
         print("\nIDAT:\n")
         self.recon_pixels = []
         self.bytes_per_pixel = 4
@@ -130,12 +130,6 @@ class IDATFilter:
         plt.title('Recon pixels plot')
         plt.show()
         return "\nPixels are filtered and shown"
-
-    def get_compress_data(self):
-        return self.recon_pixels
-
-    def get_decompress_data(self):
-        return self.IDAT_data
 
 
 class PLTEData:
