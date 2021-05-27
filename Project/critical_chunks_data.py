@@ -54,7 +54,7 @@ class IHDRData:
 
 class IDATFilter:
 
-    def __init__(self,width,height, IDAT_data):
+    def __init__(self, width, height, IDAT_data):
         print("\nIDAT:\n")
         self.recon_pixels = []
         self.bytes_per_pixel = 4
@@ -63,7 +63,6 @@ class IDATFilter:
         self.stride = width * self.bytes_per_pixel
         self.IDAT_data = []
         self.IDAT_data = IDAT_data
-
 
     @staticmethod
     def paeth_predictor(a, b, c):
@@ -163,3 +162,5 @@ class PLTEData:
         plt.title("Palette plot")
         plt.imshow(palette[indices])
         plt.show()
+
+

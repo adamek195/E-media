@@ -23,6 +23,7 @@ def choose_photo():
     chunk_processor.zTXt_chunk_processor()
     chunk_processor.tIME_chunk_prcessor()
     chunk_processor.IEND_chunk_processor()
+    chunk_processor.create_ecb_image()
     Fourier.show_plots(img_path)
     display_photo(chunk_processor)
 
