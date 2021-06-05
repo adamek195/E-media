@@ -1,5 +1,8 @@
 import random
 
+from Crypto.Util import number
+from Crypto.PublicKey import RSA as rsa_library
+from Crypto.Cipher import PKCS1_OAEP
 from numpy import byte
 
 class RSA:
@@ -120,3 +123,18 @@ class RSA:
 
         return decrypted_data
 
+    def crypto_library_encrypt(self, IDAT_data):
+        keys_library = rsa_library.construct((self.public_key['n'] , self.public_key['e']))
+        encoder_library = PKCS1_OAEP.new(keys_library)
+        key_size = self.public_key['n'].bit_length()
+        block_size = key_size//16-1
+        encrypted_data = bytearray()
+        after_iend_data = bytearray()
+        for i in range(0, len(IDAT_data), block_size):
+            bytes_block = bytes(IDAT_data[i:i+block_size])
+            encrypt_block_bytes = encoder_library.encrypt(bytes_block)
+            after_iend_data.append(encrypt_block_bytes[-1])
+            encrypt_block_bytes = encrypt_block_bytes[:-1]
+            encrypted_data += encrypt_block_bytes
+
+        return encrypted_data, after_iend_data

@@ -27,6 +27,7 @@ def choose_photo_ecb():
     chunk_processor.tIME_chunk_prcessor()
     chunk_processor.IEND_chunk_processor()
     chunk_processor.create_ecb_image()
+    chunk_processor.create_ecb_library_image()
     Fourier.show_plots(img_path)
     display_photo(chunk_processor)
 
