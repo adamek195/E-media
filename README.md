@@ -12,6 +12,7 @@ The project consists of 2 parts:
 - matplotlib
 - tkinter
 - tabulate
+- PyCryptodome
 
 ## PNG Chunks
 
