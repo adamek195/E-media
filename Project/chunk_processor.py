@@ -59,14 +59,28 @@ class PNGChunkProcessor:
         IHDR_data.print_IHDR_data()
 
 
-    def IDAT_chunk_processor(self):
+    def IDAT_chunk_processor_ecb(self):
         IDAT_data = b''.join(chunk.chunk_data for chunk in self.chunks
                                             if chunk.chunk_type == b'IDAT')
         IDAT_data = zlib.decompress(IDAT_data)
         IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
         information = IDAT_filter.print_recon_pixels()
         print(information)
-        keys = Keys(512)
+        keys = Keys()
+        public_key = keys.generate_public_key()
+        private_key = keys.generate_private_key()
+        rsa = RSA(public_key, private_key)
+        self.encrypt_data, self.after_iend_data = rsa.ecb_encrypt(IDAT_data)
+        self.decrypt_data = rsa.ecb_decrypt(self.encrypt_data, self.after_iend_data)
+
+    def IDAT_chunk_processor_cbc(self):
+        IDAT_data = b''.join(chunk.chunk_data for chunk in self.chunks
+                                            if chunk.chunk_type == b'IDAT')
+        IDAT_data = zlib.decompress(IDAT_data)
+        IDAT_filter = IDATFilter(self.width, self.height, IDAT_data)
+        information = IDAT_filter.print_recon_pixels()
+        print(information)
+        keys = Keys()
         public_key = keys.generate_public_key()
         private_key = keys.generate_private_key()
         rsa = RSA(public_key, private_key)
