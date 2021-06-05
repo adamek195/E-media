@@ -72,8 +72,8 @@ class RSA:
         encrypted_data = bytearray()
         padding = bytearray()
         after_iend_data = bytearray()
-        vectorIV = random.getrandbits(key_size)
-        previous_vector = vectorIV
+        self.vectorIV = random.getrandbits(key_size)
+        previous_vector = self.vectorIV
         for i in range(0, len(IDAT_data), block_size):
             bytes_block = bytes(IDAT_data[i:i+block_size])
 
@@ -94,3 +94,29 @@ class RSA:
             encrypted_data += encrypt_block_bytes
 
         return encrypted_data, after_iend_data
+
+    def cbc_decrypt(self, encrypted_data, after_iend_data):
+        key_size = self.private_key['n'].bit_length()
+        decrypted_data = bytearray()
+        block_size = key_size//8-1
+        previous_vector = self.vectorIV
+        k=0
+        for i in range(0, len(encrypted_data), block_size):
+            encrypted_block_bytes = encrypted_data[i:i+block_size] + after_iend_data[k].to_bytes(1, 'big')
+            encrypted_block_int = int.from_bytes(encrypted_block_bytes, 'big')
+            decrypted_block_int = self.decrypting(encrypted_block_int)
+
+            previous_vector = previous_vector.to_bytes(block_size+1,'big')
+            previous_vector = int.from_bytes(previous_vector[:block_size], 'big')
+            xor = previous_vector ^ decrypted_block_int
+
+            decrypted_block_bytes = xor.to_bytes(block_size, 'big')
+
+            decrypted_data += decrypted_block_bytes
+
+            previous_vector = int.from_bytes(encrypted_block_bytes, 'big')
+
+            k+=1
+
+        return decrypted_data
+

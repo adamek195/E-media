@@ -71,6 +71,7 @@ class PNGChunkProcessor:
         private_key = keys.generate_private_key()
         rsa = RSA(public_key, private_key)
         self.encrypt_data, self.after_iend_data = rsa.cbc_encrypt(IDAT_data)
+        self.decrypt_data = rsa.cbc_decrypt(self.encrypt_data, self.after_iend_data)
 
 
     def PLTE_chunk_processor(self):
