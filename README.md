@@ -73,7 +73,7 @@ The public key can be known to everyone- it is used to encrypt messages. Message
 
 ## Block cipher
 
-Because of big data held in IDAT chunks, we have to use the block cipher mode of operation to encrypt pixels using the RSA algorithm. In this project we use two blocks:
+Because of big data held in IDAT chunks, we have to use the block cipher mode of operation to encrypt pixels using the RSA algorithm. In this project we use two modes:
 
 - **ECB - Electronic Codebook**
 
@@ -83,7 +83,13 @@ Because of big data held in IDAT chunks, we have to use the block cipher mode of
 
 Electronic codebook is the simplest of the encryption modes. The message is divided into blocks, and each block is encrypted separately. The disadvantage of this method is a lack of diffusion. Because ECB encrypts identical plaintext blocks into identical ciphertext blocks, it does not hide data patterns well.
 
-![Menu](screenshots/ecb.PNG "Menu")
+![ECB](screenshots/ecb.PNG "ECB")
+
+### Cipher Block Chaining
+
+In CBC mode, each block of plaintext is XORed with the previous ciphertext block before being encrypted. This way, each ciphertext block depends on all plaintext blocks processed up to that point. To make each message unique, an initialization vector must be used in the first block.
+
+![CBC](screenshots/cbc.PNG "CBC")
 
 ## How to run
 
