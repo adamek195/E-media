@@ -176,15 +176,17 @@ If the image has PLTE(cubes.png doesn't have) chunk you will see a processed pal
 4. After processed chunks, the program encrypts pixels in two ways. Using our implementation
 of RSA algorithm in ECB and using Crypto library in ECB.
 
-5. In file ecb.png you will see encrypt image using our implemntation:
+5. In file ecb.png you will see encrypt image using our implementation for cubes.png:
 
 ![ecb_rsa](screenshots/ecb_rsa.PNG "ecb_rsa")
 
-5. In file ecb_library.png you will see encrypt image using library:
+5. In file ecb_library.png you will see encrypt image using library for cubes.png:
 
 ![ecb_library](screenshots/ecb_library.PNG "ecb_library")
 
-6. After processed chunks you will see Fast Fourier transform of the loaded image png:
+We can see that the Crypto library is better.
+
+6. After encrypted pixels you will see Fast Fourier transform of the loaded image png:
 
 ![fft](screenshots/fft.PNG "fft")
 
