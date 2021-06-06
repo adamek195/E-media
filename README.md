@@ -154,6 +154,8 @@ If the image has PLTE(cubes.png doesn't have) chunk you will see a processed pal
 - https://stackoverflow.com/questions/1089662/python-inflate-and-deflate-implementations
 - https://stackoverflow.com/questions/44497352/printing-one-color-using-imshow
 - https://medium.com/@prudywsh/how-to-generate-big-prime-numbers-miller-rabin-49e6e6af32fb
+- https://simple.wikipedia.org/wiki/RSA_algorithm
+- https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation
 
 ## Authors
 
