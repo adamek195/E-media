@@ -69,7 +69,7 @@ Pixels from the IDAT chunk are encrypted by the RSA algorithm. RSA (Rivest–Sha
 
 - **private key**
 
-The public key can be known to everyone- it is used to encrypt messages. Messages encrypted using the public key can only be decrypted with the private key. The private key needs to be kept secret. Calculating the private key from the public key is very difficult.
+The public key can be known to everyone- it is used to encrypt messages. Messages encrypted using the public key can only be decrypted with the private key. Calculating the private key from the public key is very difficult.
 
 ## Block cipher
 
