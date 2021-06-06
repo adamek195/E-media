@@ -61,6 +61,30 @@ The project consists of 2 parts:
 
 - **tIME** : stores the time that the image was last changed.
 
+## RSA Algorithm
+
+Pixels from the IDAT chunk are encrypted by the RSA algorithm. RSA (Rivest–Shamir–Adleman) is an algorithm used by modern computers to encrypt and decrypt messages. It is an asymmetric cryptographic algorithm. Asymmetric means that there are two different keys:
+
+- **public key**
+
+- **private key**
+
+The public key can be known to everyone- it is used to encrypt messages. Messages encrypted using the public key can only be decrypted with the private key. The private key needs to be kept secret. Calculating the private key from the public key is very difficult.
+
+## Block cipher
+
+Because of big data held in IDAT chunks, we have to use the block cipher mode of operation to encrypt pixels using the RSA algorithm. In this project we use two blocks:
+
+- **ECB - Electronic Codebook**
+
+- **CBC - Cipher Block Chaining**
+
+### Electronic Codebook
+
+Electronic codebook is the simplest of the encryption modes. The message is divided into blocks, and each block is encrypted separately. The disadvantage of this method is a lack of diffusion. Because ECB encrypts identical plaintext blocks into identical ciphertext blocks, it does not hide data patterns well.
+
+![Menu](screenshots/ecb.PNG "Menu")
+
 ## How to run
 
 1. In command line write:
