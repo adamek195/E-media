@@ -101,14 +101,14 @@ python main.py
 
 2. You will see GUI and two buttons:
 
-- 'PNG with ECB'
-- 'PNG with CBC'
+- PNG with ECB
+- PNG with CBC
 
 After pressing the button, you can load the file. You can load only png files because of the blockade. First button load chosen png files, parse him, show processed chunks, encrypt using our implementation of RSA algorithm in ECB and encrypt using Crypto library in ECB and showing Fast Fourier Transform of image. Second button load chosen png files, parse him, show processed chunks, encrypt using our implementation of RSA algorithm in CBC and showing Fast Fourier Transform of image.
 
 ![Menu](screenshots/menu.PNG "Menu")
 
-3. Afterload png file you will see processed chunks:
+3. Afterload png file and chose the first button you will see processed chunks:
 
 For example cubes.png:
 
@@ -173,13 +173,20 @@ If the image has PLTE(cubes.png doesn't have) chunk you will see a processed pal
 
 ![Palette](screenshots/palette.PNG "Palette")
 
-4. After processed chunks you will see Fast Fourier transform of the loaded image png:
+4. After processed chunks, the program encrypts pixels in two ways. Using our implementation
+of RSA algorithm in ECB and using Crypto library in ECB.
+
+5. In file ecb.png you will see encrypt image using our implemntation:
+
+![ecb_rsa](screenshots/esb_rsa.PNG "ecb_rsa")
+
+5. In file ecb_library.png you will see encrypt image using library:
+
+![ecb_library](screenshots/esb_rsa.PNG "ecb_library")
+
+6. After processed chunks you will see Fast Fourier transform of the loaded image png:
 
 ![fft](screenshots/fft.PNG "fft")
-
-5. At the end you will see saved png image only with critical chunks in GPU:
-
-![save](screenshots/save.PNG "save")
 
 ## Bibliography
 
