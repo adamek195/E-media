@@ -173,8 +173,7 @@ If the image has PLTE(cubes.png doesn't have) chunk you will see a processed pal
 
 ![Palette](screenshots/palette.PNG "Palette")
 
-4. After processed chunks, the program encrypts pixels in two ways. Using our implementation
-of RSA algorithm in ECB and using Crypto library in ECB.
+4. After processed chunks, the program encrypts pixels in two ways with the same generated pair of keys. Using our implementation of RSA algorithm in ECB and using Crypto library in ECB.
 
 5. In file ecb.png you will see encrypt image using our implementation for cubes.png:
 
@@ -189,6 +188,95 @@ We can see that the Crypto library is better.
 6. After encrypted pixels you will see Fast Fourier transform of the loaded image png:
 
 ![fft](screenshots/fft.PNG "fft")
+
+7. At the end you will see saved png image with decrypted pixels in GUI:
+
+![save](screenshots/save.PNG "save")
+
+8. Afterload png file and chose the second button you will see processed chunks:
+
+For example lot_of_chunks.png:
+
+```shell
+IHDR:
+
+Width of image 91 and height of image 69
+Bit depth of image: 8
+PNG Image Type: Truecolor with alpha
+Compression method: 0
+Filter method: 0
+Interlace method: 0
+
+IDAT:
+
+Recon pixels are shown by matplotlib on Figure 1
+
+Pixels are filtered and shown
+
+PLTE chunk is optional
+
+gAMA:
+
+The value of decoded gamma is 0.45455
+
+tEXt:
+
+Keyword: Title
+Data: PNG
+
+
+iTXt:
+
+Keyword: Author
+Compress method 0
+Data: La plume de ma tante
+
+
+iTXt:
+
+Keyword: Warning
+Compress method 1
+Data: Es is verboten, um diese Datei in das GIF-Bildformat
+umzuwandeln.  Sie sind gevarnt worden.
+
+
+zTXt:
+
+Keyword: Description
+Compress method 0
+Data: Rendered by Persistence of Vision (tm) Ray Tracer
+Version 3.0, using the Times New Roman font and DMFWood6.
+Since POV-Ray does not direclty support interlaced output,
+this file has been converted to an interlaced image via a
+post-processing step.
+
+
+tIME:
+
+Last modification date: 07.06.1996 17:58:08
+
+IEND:
+
+IEND is empty
+```
+
+Recon pixels:
+
+![Pixels2](screenshots/pixels2.PNG "Pixels2")
+
+9. After processed chunks, the program encrypts pixels using our implementation of RSA algorithm in CBC.
+
+10. In file cbc.png you will see encrypt image using our implementation for lot_of_chunks.png:
+
+![cbc_rsa](screenshots/cbc_rsa.PNG "cbc_rsa")
+
+11. After encrypted pixels you will see Fast Fourier transform of the loaded image png:
+
+![fft2](screenshots/fft2.PNG "fft2")
+
+12. At the end you will see saved png image with decrypted pixels in GUI:
+
+![save2](screenshots/save2.PNG "save2")
 
 ## Bibliography
 
