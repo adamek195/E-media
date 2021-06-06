@@ -99,7 +99,12 @@ In CBC mode, each block of plaintext is XORed with the previous ciphertext block
 python main.py
 ```
 
-2. You will see GUI, press button 'load photo'. GUI can only load png files:
+2. You will see GUI and two buttons:
+
+- 'PNG with ECB'
+- 'PNG with CBC'
+
+After pressing the button, you can load the file. You can load only png files because of the blockade. First button load chosen png files, parse him, show processed chunks, encrypt using our implementation of RSA algorithm in ECB and encrypt using Crypto library in ECB and showing Fast Fourier Transform of image. Second button load chosen png files, parse him, show processed chunks, encrypt using our implementation of RSA algorithm in CBC and showing Fast Fourier Transform of image.
 
 ![Menu](screenshots/menu.PNG "Menu")
 
