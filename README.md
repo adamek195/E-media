@@ -178,11 +178,11 @@ of RSA algorithm in ECB and using Crypto library in ECB.
 
 5. In file ecb.png you will see encrypt image using our implemntation:
 
-![ecb_rsa](screenshots/esb_rsa.PNG "ecb_rsa")
+![ecb_rsa](screenshots/ecb_rsa.PNG "ecb_rsa")
 
 5. In file ecb_library.png you will see encrypt image using library:
 
-![ecb_library](screenshots/esb_rsa.PNG "ecb_library")
+![ecb_library](screenshots/ecb_library.PNG "ecb_library")
 
 6. After processed chunks you will see Fast Fourier transform of the loaded image png:
 
