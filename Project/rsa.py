@@ -35,6 +35,7 @@ class RSA:
         encrypted_data = bytearray()
         padding = bytearray()
         after_iend_data = bytearray()
+
         for i in range(0, len(IDAT_data), block_size):
             bytes_block = bytes(IDAT_data[i:i+block_size])
 
@@ -47,6 +48,7 @@ class RSA:
             int_block = int.from_bytes(bytes_block, 'big')
             encrypt_block_int = self.encrypting(int_block)
             encrypt_block_bytes = encrypt_block_int.to_bytes(block_size+1, 'big')
+
             after_iend_data.append(encrypt_block_bytes[-1])
             encrypt_block_bytes = encrypt_block_bytes[:-1]
             encrypted_data += encrypt_block_bytes
@@ -60,11 +62,14 @@ class RSA:
         decrypted_data = bytearray()
         block_size = key_size//8-1
         k=0
+
         for i in range(0, len(encrypted_data), block_size):
             encrypted_block_bytes = encrypted_data[i:i+block_size] + after_iend_data[k].to_bytes(1, 'big')
             encrypted_block_int = int.from_bytes(encrypted_block_bytes, 'big')
+
             decrypted_block_int = self.decrypting(encrypted_block_int)
             decrypted_block_bytes = decrypted_block_int.to_bytes(block_size, 'big')
+
             decrypted_data += decrypted_block_bytes
             k+=1
         return decrypted_data
@@ -77,6 +82,7 @@ class RSA:
         after_iend_data = bytearray()
         self.vectorIV = random.getrandbits(key_size)
         previous_vector = self.vectorIV
+
         for i in range(0, len(IDAT_data), block_size):
             bytes_block = bytes(IDAT_data[i:i+block_size])
 
@@ -88,10 +94,12 @@ class RSA:
 
             previous_vector = previous_vector.to_bytes(block_size + 1, 'big')
             previous_vector = int.from_bytes(previous_vector[:len(bytes_block)], 'big')
+
             xor = int.from_bytes(bytes_block, 'big') ^ previous_vector
             encrypt_block_int = self.encrypting(xor)
             previous_vector = encrypt_block_int
             encrypt_block_bytes = encrypt_block_int.to_bytes(block_size+1, 'big')
+
             after_iend_data.append(encrypt_block_bytes[-1])
             encrypt_block_bytes = encrypt_block_bytes[:-1]
             encrypted_data += encrypt_block_bytes
@@ -104,6 +112,7 @@ class RSA:
         block_size = key_size//8-1
         previous_vector = self.vectorIV
         k=0
+
         for i in range(0, len(encrypted_data), block_size):
             encrypted_block_bytes = encrypted_data[i:i+block_size] + after_iend_data[k].to_bytes(1, 'big')
             encrypted_block_int = int.from_bytes(encrypted_block_bytes, 'big')
@@ -114,11 +123,9 @@ class RSA:
             xor = previous_vector ^ decrypted_block_int
 
             decrypted_block_bytes = xor.to_bytes(block_size, 'big')
-
             decrypted_data += decrypted_block_bytes
 
             previous_vector = int.from_bytes(encrypted_block_bytes, 'big')
-
             k+=1
 
         return decrypted_data
@@ -130,9 +137,11 @@ class RSA:
         block_size = key_size//16-1
         encrypted_data = bytearray()
         after_iend_data = bytearray()
+
         for i in range(0, len(IDAT_data), block_size):
             bytes_block = bytes(IDAT_data[i:i+block_size])
             encrypt_block_bytes = encoder_library.encrypt(bytes_block)
+
             after_iend_data.append(encrypt_block_bytes[-1])
             encrypt_block_bytes = encrypt_block_bytes[:-1]
             encrypted_data += encrypt_block_bytes

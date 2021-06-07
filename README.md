@@ -61,6 +61,36 @@ The project consists of 2 parts:
 
 - **tIME** : stores the time that the image was last changed.
 
+## RSA Algorithm
+
+Pixels from the IDAT chunk are encrypted by the RSA algorithm. RSA (Rivest–Shamir–Adleman) is an algorithm used by modern computers to encrypt and decrypt messages. It is an asymmetric cryptographic algorithm. Asymmetric means that there are two different keys:
+
+- **public key**
+
+- **private key**
+
+The public key can be known to everyone- it is used to encrypt messages. Messages encrypted using the public key can only be decrypted with the private key. Calculating the private key from the public key is very difficult.
+
+## Block cipher
+
+Because of big data held in IDAT chunks, we have to use the block cipher mode of operation to encrypt pixels using the RSA algorithm. In this project we use two modes:
+
+- **ECB - Electronic Codebook**
+
+- **CBC - Cipher Block Chaining**
+
+### Electronic Codebook
+
+Electronic codebook is the simplest of the encryption modes. The message is divided into blocks, and each block is encrypted separately. The disadvantage of this method is a lack of diffusion. Because ECB encrypts identical plaintext blocks into identical ciphertext blocks, it does not hide data patterns well.
+
+![ECB](screenshots/ecb.PNG "ECB")
+
+### Cipher Block Chaining
+
+In CBC mode, each block of plaintext is XORed with the previous ciphertext block before being encrypted. This way, each ciphertext block depends on all plaintext blocks processed up to that point. To make each message unique, an initialization vector must be used in the first block.
+
+![CBC](screenshots/cbc.PNG "CBC")
+
 ## How to run
 
 1. In command line write:
@@ -69,11 +99,16 @@ The project consists of 2 parts:
 python main.py
 ```
 
-2. You will see GUI, press button 'load photo'. GUI can only load png files:
+2. You will see GUI and two buttons:
+
+- PNG with ECB
+- PNG with CBC
+
+After pressing the button, you can load the file. You can load only png files because of the blockade. First button load chosen png files, parse him, show processed chunks, encrypt using our implementation of RSA algorithm in ECB and encrypt using Crypto library in ECB and showing Fast Fourier Transform of image. Second button load chosen png files, parse him, show processed chunks, encrypt using our implementation of RSA algorithm in CBC and showing Fast Fourier Transform of image.
 
 ![Menu](screenshots/menu.PNG "Menu")
 
-3. Afterload png file you will see processed chunks:
+3. Afterload png file and chose the first button you will see processed chunks:
 
 For example cubes.png:
 
@@ -138,13 +173,110 @@ If the image has PLTE(cubes.png doesn't have) chunk you will see a processed pal
 
 ![Palette](screenshots/palette.PNG "Palette")
 
-4. After processed chunks you will see Fast Fourier transform of the loaded image png:
+4. After processed chunks, the program encrypts pixels in two ways with the same generated pair of keys. Using our implementation of RSA algorithm in ECB and using Crypto library in ECB.
+
+5. In file ecb.png you will see encrypt image using our implementation for cubes.png:
+
+![ecb_rsa](screenshots/ecb_rsa.PNG "ecb_rsa")
+
+5. In file ecb_library.png you will see encrypt image using library for cubes.png:
+
+![ecb_library](screenshots/ecb_library.PNG "ecb_library")
+
+We can see that the Crypto library is better.
+
+6. After encrypted pixels you will see Fast Fourier transform of the loaded image png:
 
 ![fft](screenshots/fft.PNG "fft")
 
-5. At the end you will see saved png image only with critical chunks in GPU:
+7. At the end you will see saved png image with decrypted pixels in GUI:
 
 ![save](screenshots/save.PNG "save")
+
+8. Afterload png file and chose the second button you will see processed chunks:
+
+For example lot_of_chunks.png:
+
+```shell
+IHDR:
+
+Width of image 91 and height of image 69
+Bit depth of image: 8
+PNG Image Type: Truecolor with alpha
+Compression method: 0
+Filter method: 0
+Interlace method: 0
+
+IDAT:
+
+Recon pixels are shown by matplotlib on Figure 1
+
+Pixels are filtered and shown
+
+PLTE chunk is optional
+
+gAMA:
+
+The value of decoded gamma is 0.45455
+
+tEXt:
+
+Keyword: Title
+Data: PNG
+
+
+iTXt:
+
+Keyword: Author
+Compress method 0
+Data: La plume de ma tante
+
+
+iTXt:
+
+Keyword: Warning
+Compress method 1
+Data: Es is verboten, um diese Datei in das GIF-Bildformat
+umzuwandeln.  Sie sind gevarnt worden.
+
+
+zTXt:
+
+Keyword: Description
+Compress method 0
+Data: Rendered by Persistence of Vision (tm) Ray Tracer
+Version 3.0, using the Times New Roman font and DMFWood6.
+Since POV-Ray does not direclty support interlaced output,
+this file has been converted to an interlaced image via a
+post-processing step.
+
+
+tIME:
+
+Last modification date: 07.06.1996 17:58:08
+
+IEND:
+
+IEND is empty
+```
+
+Recon pixels:
+
+![Pixels2](screenshots/pixels2.PNG "Pixels2")
+
+9. After processed chunks, the program encrypts pixels using our implementation of RSA algorithm in CBC.
+
+10. In file cbc.png you will see encrypt image using our implementation for lot_of_chunks.png:
+
+![cbc_rsa](screenshots/cbc_rsa.PNG "cbc_rsa")
+
+11. After encrypted pixels you will see Fast Fourier transform of the loaded image png:
+
+![fft2](screenshots/fft2.PNG "fft2")
+
+12. At the end you will see saved png image with decrypted pixels in GUI:
+
+![save2](screenshots/save2.PNG "save2")
 
 ## Bibliography
 
@@ -154,6 +286,8 @@ If the image has PLTE(cubes.png doesn't have) chunk you will see a processed pal
 - https://stackoverflow.com/questions/1089662/python-inflate-and-deflate-implementations
 - https://stackoverflow.com/questions/44497352/printing-one-color-using-imshow
 - https://medium.com/@prudywsh/how-to-generate-big-prime-numbers-miller-rabin-49e6e6af32fb
+- https://simple.wikipedia.org/wiki/RSA_algorithm
+- https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation
 
 ## Authors
 
