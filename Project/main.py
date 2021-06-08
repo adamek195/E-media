@@ -13,10 +13,7 @@ def choose_photo_ecb():
     chunk_processor.save_chunks(img_source)
     chunk_processor.print_chunks_types()
     chunk_processor.IHDR_chunk_processor()
-    try:
-        chunk_processor.IDAT_chunk_processor_ecb()
-    except:
-        chunk_processor.IDAT_chunk_processor_ecb()
+    chunk_processor.IDAT_chunk_processor_ecb()
     chunk_processor.PLTE_chunk_processor()
     chunk_processor.gAMA_chunk_processor()
     chunk_processor.cHRM_chunk_processor()
@@ -38,10 +35,7 @@ def choose_photo_cbc():
     chunk_processor.save_chunks(img_source)
     chunk_processor.print_chunks_types()
     chunk_processor.IHDR_chunk_processor()
-    try:
-        chunk_processor.IDAT_chunk_processor_cbc()
-    except:
-        chunk_processor.IDAT_chunk_processor_cbc()
+    chunk_processor.IDAT_chunk_processor_cbc()
     chunk_processor.PLTE_chunk_processor()
     chunk_processor.gAMA_chunk_processor()
     chunk_processor.cHRM_chunk_processor()
